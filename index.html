@@ -1061,85 +1061,122 @@
         function CryptoGame() {
             const [coins, setCoins] = React.useState([]);
     const [selected, setSelected] = React.useState(null);
-    const [price, setPrice] = React.useState(null);
-    const [balance, setBalance] = React.useState(100000);
-    const [holdings, setHoldings] = React.useState(0);
+    const [prices, setPrices] = React.useState({});
+    const [balance, setBalance] = React.useState(5000);
+    const [wallet, setWallet] = React.useState({});
 
-    // Fetch coin list on mount
+    // Fetch top 10 coins
     React.useEffect(() => {
         fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10")
             .then(res => res.json())
             .then(data => {
                 setCoins(data);
-                setSelected(data[0]); // default selection
+                setSelected(data[0]);
+                const priceMap = {};
+                data.forEach(c => { priceMap[c.id] = c.current_price; });
+                setPrices(priceMap);
             });
     }, []);
 
-    // Fetch price of selected coin every 5s
+    // Update prices every 5 seconds
     React.useEffect(() => {
-        if (!selected) return;
-        const fetchPrice = () => {
-            fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${selected.id}&vs_currencies=usd`)
+        const interval = setInterval(() => {
+            fetch("https://api.coingecko.com/api/v3/simple/price?ids=" +
+                coins.map(c => c.id).join(",") +
+                "&vs_currencies=usd")
                 .then(res => res.json())
-                .then(data => setPrice(data[selected.id].usd));
-        };
-        fetchPrice();
-        const interval = setInterval(fetchPrice, 5000);
+                .then(data => {
+                    const updatedPrices = {};
+                    for (let key in data) {
+                        updatedPrices[key] = data[key].usd;
+                    }
+                    setPrices(updatedPrices);
+                });
+        }, 5000);
         return () => clearInterval(interval);
-    }, [selected]);
+    }, [coins]);
 
     const buy = () => {
-        if (price && balance >= price) {
+        const price = prices[selected.id];
+        if (balance >= price) {
             setBalance(b => b - price);
-            setHoldings(h => h + 1);
+            setWallet(w => ({ ...w, [selected.id]: (w[selected.id] || 0) + 1 }));
         }
     };
 
     const sell = () => {
-        if (holdings > 0) {
-            setHoldings(h => h - 1);
+        const price = prices[selected.id];
+        if ((wallet[selected.id] || 0) > 0) {
             setBalance(b => b + price);
+            setWallet(w => ({ ...w, [selected.id]: w[selected.id] - 1 }));
         }
     };
 
     return (
-        <div className="crypto-game">
-            <h3>Crypto Trading Simulator</h3>
+        <div style={{ maxWidth: "800px", margin: "0 auto", fontFamily: "sans-serif" }}>
+            <h2 style={{ color: "#4F46E5" }}>💸 Crypto Wallet Simulator</h2>
 
-            <label>Select Coin:</label>
-            <select
-                onChange={e => {
-                    const coin = coins.find(c => c.id === e.target.value);
-                    setSelected(coin);
-                    setHoldings(0); // reset holdings on switch
-                }}
-                value={selected?.id || ''}
-            >
-                {coins.map(coin => (
-                    <option key={coin.id} value={coin.id}>
-                        {coin.name}
-                    </option>
-                ))}
-            </select>
+            <div style={{ marginBottom: "1rem" }}>
+                <label style={{ fontWeight: "bold" }}>Select Coin:</label>
+                <select
+                    style={{ padding: "0.5rem", borderRadius: "8px", border: "1px solid #ccc", marginLeft: "1rem" }}
+                    onChange={e => setSelected(coins.find(c => c.id === e.target.value))}
+                    value={selected?.id}
+                >
+                    {coins.map(coin => (
+                        <option key={coin.id} value={coin.id}>
+                            {coin.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             {selected && (
-                <>
-                    <div style={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}>
-                        <img src={selected.image} alt={selected.name} style={{ width: 24, height: 24, marginRight: 8 }} />
-                        <strong>{selected.name}</strong> @ ${price?.toFixed(2) ?? 'Loading...'}
+                <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "1rem",
+                    background: "#fff",
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+                    marginBottom: "2rem"
+                }}>
+                    <img src={selected.image} alt={selected.name} style={{ width: 32, height: 32, marginRight: 12 }} />
+                    <div>
+                        <strong>{selected.name}</strong> ({selected.symbol.toUpperCase()})<br />
+                        💲Price: ${prices[selected.id]?.toFixed(2) || "Loading..."}
                     </div>
-
-                    <p>💰 Balance: ${balance.toFixed(2)}</p>
-                    <p>🪙 Holdings: {holdings} {selected.symbol.toUpperCase()}</p>
-
-                    <button onClick={buy} disabled={!price || balance < price}>Buy 1</button>
-                    <button onClick={sell} disabled={holdings === 0}>Sell 1</button>
-                </>
+                    <div style={{ marginLeft: "auto", display: "flex", gap: "1rem" }}>
+                        <button onClick={buy} style={{ background: "#4F46E5", color: "white", border: "none", padding: "0.5rem 1rem", borderRadius: "6px" }}>
+                            Buy 1
+                        </button>
+                        <button onClick={sell} style={{ background: "#DC2626", color: "white", border: "none", padding: "0.5rem 1rem", borderRadius: "6px" }}>
+                            Sell 1
+                        </button>
+                    </div>
+                </div>
             )}
+
+            <h3 style={{ marginBottom: "0.5rem" }}>📊 Wallet Summary</h3>
+            <div style={{ background: "#f9fafb", padding: "1rem", borderRadius: "8px" }}>
+                <p><strong>💰 Balance:</strong> ${balance.toFixed(2)}</p>
+                {Object.keys(wallet).length === 0 ? (
+                    <p>No holdings yet</p>
+                ) : (
+                    Object.entries(wallet).map(([coinId, qty]) => {
+                        const coin = coins.find(c => c.id === coinId);
+                        return (
+                            <div key={coinId} style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
+                                <img src={coin.image} alt={coin.name} style={{ width: 20, height: 20, marginRight: 8 }} />
+                                <div>{coin.name} ({coin.symbol.toUpperCase()}) — {qty} coins</div>
+                            </div>
+                        );
+                    })
+                )}
+            </div>
         </div>
     );
-}
-        // AI Code Generator Component
+}        // AI Code Generator Component
         function AIGenerator() {
             const [input, setInput] = useState('');
             const [output, setOutput] = useState('// AI-generated code will appear here...\n// Try typing: "create a function to sort an array"');

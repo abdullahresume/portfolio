@@ -1059,54 +1059,49 @@
 
          // Crypto Trading Simulator Component
         function CryptoGame() {
-            const [price, setPrice] = useState(45000);
-            const [portfolio, setPortfolio] = useState(1000);
-            const [position, setPosition] = useState(0);
-            const [history, setHistory] = useState([45000]);
+            const [price, setPrice] = React.useState(null);
+    const [balance, setBalance] = React.useState(1000);
+    const [btc, setBtc] = React.useState(0);
 
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    setPrice(prev => {
-                        const change = (Math.random() - 0.5) * 2000;
-                        const newPrice = Math.max(1000, prev + change);
-                        setHistory(h => [...h.slice(-20), newPrice]);
-                        return newPrice;
-                    });
-                }, 1000);
+    React.useEffect(() => {
+        const fetchPrice = async () => {
+            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+            const data = await res.json();
+            setPrice(data.bitcoin.usd);
+        };
+        fetchPrice();
+        const interval = setInterval(fetchPrice, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
-                return () => clearInterval(interval);
-            }, []);
-
-            const buy = () => {
-                if (portfolio >= price) {
-                    setPortfolio(p => p - price);
-                    setPosition(pos => pos + 1);
-                }
-            };
-
-            const sell = () => {
-                if (position > 0) {
-                    setPortfolio(p => p + price);
-                    setPosition(pos => pos - 1);
-                }
-            };
-
-            return (
-                <div className="crypto-game">
-                    <div className="crypto-price">BTC: ${price.toLocaleString()}</div>
-                    <div className="crypto-chart"></div>
-                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', margin: '0.5rem 0'}}>
-                        <span>Portfolio: ${portfolio.toFixed(2)}</span>
-                        <span>Position: {position} BTC</span>
-                    </div>
-                    <div className="crypto-controls">
-                        <button className="btn" onClick={buy} disabled={portfolio < price}>Buy</button>
-                        <button className="btn" onClick={sell} disabled={position === 0}>Sell</button>
-                    </div>
-                </div>
-            );
+    const buy = () => {
+        if (!price) return;
+        const amount = 1;
+        if (balance >= price * amount) {
+            setBalance(balance - price * amount);
+            setBtc(btc + amount);
         }
+    };
 
+    const sell = () => {
+        if (btc >= 1) {
+            setBtc(btc - 1);
+            setBalance(balance + price);
+        }
+    };
+
+    return (
+        <div className="crypto-game">
+            <h4>BTC/USD: ${price ?? 'Loading...'}</h4>
+            <div className="crypto-price">💰 Balance: ${balance.toFixed(2)}</div>
+            <div>🪙 BTC Holdings: {btc} BTC</div>
+            <div className="crypto-controls">
+                <button onClick={buy} className="btn">Buy 1 BTC</button>
+                <button onClick={sell} className="btn btn-danger">Sell 1 BTC</button>
+            </div>
+        </div>
+    );
+}
         // AI Code Generator Component
         function AIGenerator() {
             const [input, setInput] = useState('');

@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdullah Ali - Software Engineer Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.0/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .section {
+            margin: 100px 0;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-top: 80px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .skill-category h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .experience-item {
+            border-left: 4px solid #667eea;
+            padding-left: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+        }
+
+        .company {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .position {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
+        .date {
+            color: #666;
+            font-style: italic;
+        }
+
+        .responsibilities {
+            margin-top: 1rem;
+            list-style: none;
+        }
+
+        .responsibilities li {
+            margin: 0.5rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .responsibilities li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-demo {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 250px;
+        }
+
+        .calc-display {
+            grid-column: span 4;
+            padding: 1rem;
+            background: #333;
+            color: white;
+            text-align: right;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .calc-btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            background: #667eea;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .calc-btn:hover {
+            background: #5a67d8;
+        }
+
+        .calc-btn.operator {
+            background: #f093fb;
+        }
+
+        .todo-app {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .todo-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+        }
+
+        .todo-item.completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .weather-widget {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .weather-display {
+            font-size: 2rem;
+            margin: 1rem 0;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 200px;
+        }
+
+        .crypto-game {
+            width: 100%;
+            text-align: center;
+        }
+
+        .crypto-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .crypto-chart {
+            height: 80px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            margin: 1rem 0;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crypto-chart::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.3) 50%, transparent 55%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .crypto-controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .ai-generator {
+            width: 100%;
+        }
+
+        .ai-input {
+            width: 100%;
+            height: 60px;
+            padding: 0.5rem;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            resize: vertical;
+        }
+
+        .ai-output {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            min-height: 100px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+        }
+
+        .neural-network {
+            width: 100%;
+            height: 180px;
+            background: radial-gradient(circle, #667eea 1px, transparent 1px);
+            background-size: 20px 20px;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .neuron {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        .blockchain-chain {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .block {
+            min-width: 80px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            position: relative;
+        }
+
+        .block::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .block:last-child::after {
+            display: none;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            height: 160px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .quantum-maze {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 2px;
+            height: 150px;
+        }
+
+        .maze-cell {
+            background: #f0f0f0;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .maze-cell.wall {
+            background: #333;
+        }
+
+        .maze-cell.player {
+            background: #ff6b6b;
+        }
+
+        .maze-cell.goal {
+            background: #4ecdc4;
+        }
+
+        .maze-cell.quantum {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            animation: quantum-flicker 1s infinite;
+        }
+
+        @keyframes quantum-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .security-scanner {
+            width: 100%;
+        }
+
+        .scan-progress {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .scan-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ffa500, #4ecdc4);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        .vulnerability-list {
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .vuln-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.2rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .severity-high { color: #ff6b6b; }
+        .severity-medium { color: #ffa500; }
+        .severity-low { color: #4ecdc4; }
+
+        .contract-builder {
+            width: 100%;
+        }
+
+        .contract-components {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .component-block {
+            padding: 0.5rem;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+
+        .component-block:hover {
+            transform: scale(1.05);
+        }
+
+        .contract-output {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            height: 80px;
+            overflow-y: auto;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .section {
+                padding: 2rem;
+                margin: 50px 0;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="logo">Abdullah Ali</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section id="home" class="hero">
+            <h1>Abdullah Ali</h1>
+            <p>Seasoned Software Engineer & AI Specialist</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📍</span>
+                    <span>Ontario, Canada</span>
+                </div>
+                <div class="contact-item">
+                    <span>📞</span>
+                    <span>(519) 981-8202</span>
+                </div>
+                <div class="contact-item">
+                    <span>✉️</span>
+                    <span>abdullah20109@yahoo.fr</span>
+                </div>
+                <div class="contact-item">
+                    <span>🔗</span>
+                    <a href="https://github.com/ali-abdullah" style="color: white;">GitHub</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <h2 style="margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">About Me</h2>
+            <p style="font-size: 1.1rem; line-height: 1.8;">
+                Seasoned Software Engineer with a solid background in designing, coding, testing and debugging software applications. 
+                Proven strengths include strong problem-solving abilities, effective teamwork skills, and adherence to software development best practices. 
+                Prior roles have demonstrated the ability to increase efficiency by developing innovative solutions and implementing continuous improvement processes.
+            </p>
+            <div style="margin-top: 2rem;">
+                <h3 style="color: #667eea; margin-bottom: 1rem;">Education</h3>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Master of Science, Computer Science (Spec. Cyber Security)</strong><br>
+                    University of Sunderland － Sunderland, U.K (May 2024)
+                </div>
+                <div>
+                    <strong>Ontario Diploma, Internet Application and Web Development</strong><br>
+                    St-Clair College － Windsor, Ontario (May 2022)
+                </div>
+            </div>
+            <div style="margin-top: 2rem;">
+                <h3 style="color: #667eea; margin-bottom: 1rem;">Certifications</h3>
+                <ul style="list-style: none;">
+                    <li>• Certified in Cybersecurity (CC), ISC² Member</li>
+                    <li>• Information Security Management Post Graduate Certificate (ISM)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="skills" class="section">
+            <h2 style="margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">C#</span>
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">PHP</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Frameworks & Libraries</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">.NET</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Express.js</span>
+                        <span class="skill-tag">AngularJS</span>
+                        <span class="skill-tag">Redux.js</span>
+                        <span class="skill-tag">Blazor</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>AI & Machine Learning</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">Prompt Engineering</span>
+                        <span class="skill-tag">Azure AI Services</span>
+                        <span class="skill-tag">NLP</span>
+                        <span class="skill-tag">Computer Vision</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Cloud & Database</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Azure</span>
+                        <span class="skill-tag">MongoDB</span>
+                        <span class="skill-tag">Cloud Architecture</span>
+                        <span class="skill-tag">Data Migration</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="section">
+  <h2 style="margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">Work Experience</h2>
+
+  <div class="experience-item">
+    <div class="company">Wolters Kluwer</div>
+    <div class="position">Bilingual Senior Technical Engineer</div>
+    <div class="date">Jan 2023 to Present</div>
+    <ul class="responsibilities">
+      <li>Delivered bilingual technical support, troubleshooting software issues and ensuring adherence to security protocols, achieving a customer satisfaction rate of 95%</li>
+      <li>Implemented ML-based automation solutions to streamline support processes, reducing resolution time by 40%</li>
+      <li>Utilized NLP technologies to enhance documentation and knowledge base systems, improving information retrieval accuracy by 40%</li>
+    </ul>
+  </div>
+
+  <div class="experience-item">
+    <div class="company">Apple</div>
+    <div class="position">Bilingual Technical Support</div>
+    <div class="date">Jan 2023 to Jul 2023</div>
+    <ul class="responsibilities">
+      <li>Provided bilingual technical support and software troubleshooting, maintaining a 95% customer satisfaction rate</li>
+      <li>Streamlined support operations with ML-based automation, improving efficiency by 40%</li>
+      <li>Improved documentation with NLP-powered enhancements, boosting information accuracy</li>
+    </ul>
+  </div>
+
+  <div class="experience-item">
+    <div class="company">Scale AI</div>
+    <div class="position">AI Software Engineer</div>
+    <div class="date">Feb 2024 to Oct 2024</div>
+    <ul class="responsibilities">
+      <li>Developed and optimized ML models for computer vision, NLP, and multi-modal AI tasks, increasing model accuracy by 20%</li>
+      <li>Fine-tuned LLMs and advanced prompt systems to improve AI performance</li>
+      <li>Integrated scalable AI algorithms using Python and TensorFlow</li>
+    </ul>
+  </div>
+
+  <div class="experience-item">
+    <div class="company">Shaheen E-Commerce</div>
+    <div class="position">Full Stack Developer</div>
+    <div class="date">Jan 2023 to Aug 2023 – Remote</div>
+    <ul class="responsibilities">
+      <li>Led the development of a multi-vendor e-commerce platform serving 50+ vendors</li>
+      <li>Integrated Stripe and PayPal payment gateways, reducing transaction errors by 25%</li>
+      <li>Built a responsive admin dashboard with real-time analytics, improving sales tracking accuracy by 40%</li>
+    </ul>
+  </div>
+
+  <div class="experience-item">
+    <div class="company">Eco-Environmental</div>
+    <div class="position">Full Stack Software Engineer</div>
+    <div class="date">May 2022 to Sep 2023</div>
+    <ul class="responsibilities">
+      <li>Built an environmental compliance tracking system using the MERN stack, improving accuracy by 20%</li>
+      <li>Developed real-time data visualization dashboards for decision-making</li>
+      <li>Designed RESTful APIs for sensor integration, ensuring data interoperability</li>
+    </ul>
+  </div>
+
+  <div class="experience-item">
+    <div class="company">AUL Fleet</div>
+    <div class="position">Full Stack Software Engineer</div>
+    <div class="date">May 2021 to May 2022</div>
+    <ul class="responsibilities">
+      <li>Developed a fleet management solution for 200+ vehicles with real-time location tracking</li>
+      <li>Built a mobile-responsive app in React Native with a 4.7/5 user rating</li>
+      <li>Created RESTful APIs for seamless mobile and web integration</li>
+    </ul>
+  </div>
+
+  <div class="experience-item">
+    <div class="company">Naqlista</div>
+    <div class="position">Security Analyst</div>
+    <div class="date">Jan 2021 to Dec 2021</div>
+    <ul class="responsibilities">
+      <li>Conducted vulnerability assessments and penetration testing to identify security risks</li>
+      <li>Implemented AI-based security monitoring using SIEM systems</li>
+      <li>Assisted in drafting and implementing security policies</li>
+      <li>Monitored logs with ML-based anomaly detection</li>
+    </ul>
+  </div>
+</section>
+
+        <section id="projects" class="section">
+            <h2 style="margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">Innovative Interactive Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>🚀 Crypto Trading Simulator</h3>
+                    <p>Real-time cryptocurrency trading game with portfolio tracking and market analysis.</p>
+                    <div id="crypto-game" class="project-demo"></div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>🤖 AI Code Generator</h3>
+                    <p>Interactive AI assistant that generates code snippets based on natural language descriptions.</p>
+                    <div id="ai-generator" class="project-demo"></div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>🌐 3D Neural Network Visualizer</h3>
+                    <p>Interactive 3D visualization of neural network architecture with animated data flow.</p>
+                    <div id="neural-viz" class="project-demo"></div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>🔐 Blockchain Explorer</h3>
+                    <p>Mini blockchain implementation with transaction creation and block mining simulation.</p>
+                    <div id="blockchain-demo" class="project-demo"></div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>📊 Real-time Analytics Dashboard</h3>
+                    <p>Live data streaming dashboard with multiple chart types and filtering capabilities.</p>
+                    <div id="analytics-dashboard" class="project-demo"></div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>🎮 Quantum Maze Game</h3>
+                    <p>Physics-based puzzle game demonstrating quantum computing principles.</p>
+                    <div id="quantum-maze" class="project-demo"></div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>🔍 Cybersecurity Scanner</h3>
+                    <p>Interactive security assessment tool with vulnerability detection simulation.</p>
+                    <div id="security-scanner" class="project-demo"></div>
+                </div>
+                
+                <div class="project-card">
+                    <h3>🌟 Smart Contract Builder</h3>
+                    <p>Visual smart contract creator with drag-and-drop functionality and Solidity generation.</p>
+                    <div id="smart-contract" class="project-demo"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Calculator Component
+        function Calculator() {
+            const [display, setDisplay] = useState('0');
+            const [operation, setOperation] = useState(null);
+            const [previousValue, setPreviousValue] = useState(null);
+            const [waitingForNumber, setWaitingForNumber] = useState(false);
+
+            const inputNumber = (num) => {
+                if (waitingForNumber) {
+                    setDisplay(String(num));
+                    setWaitingForNumber(false);
+                } else {
+                    setDisplay(display === '0' ? String(num) : display + num);
+                }
+            };
+
+            const inputOperation = (nextOperation) => {
+                const inputValue = parseFloat(display);
+
+                if (previousValue === null) {
+                    setPreviousValue(inputValue);
+                } else if (operation) {
+                    const currentValue = previousValue || 0;
+                    const newValue = calculate(currentValue, inputValue, operation);
+                    
+                    setDisplay(String(newValue));
+                    setPreviousValue(newValue);
+                }
+
+                setWaitingForNumber(true);
+                setOperation(nextOperation);
+            };
+
+            const calculate = (firstValue, secondValue, operation) => {
+                switch (operation) {
+                    case '+':
+                        return firstValue + secondValue;
+                    case '-':
+                        return firstValue - secondValue;
+                    case '×':
+                        return firstValue * secondValue;
+                    case '÷':
+                        return firstValue / secondValue;
+                    case '=':
+                        return secondValue;
+                    default:
+                        return secondValue;
+                }
+            };
+
+            const performCalculation = () => {
+                const inputValue = parseFloat(display);
+
+                if (previousValue !== null && operation) {
+                    const newValue = calculate(previousValue, inputValue, operation);
+                    setDisplay(String(newValue));
+                    setPreviousValue(null);
+                    setOperation(null);
+                    setWaitingForNumber(true);
+                }
+            };
+
+            const clear = () => {
+                setDisplay('0');
+                setOperation(null);
+                setPreviousValue(null);
+                setWaitingForNumber(false);
+            };
+
+            return (
+                <div className="calculator">
+                    <div className="calc-display">{display}</div>
+                    <button className="calc-btn" onClick={clear}>C</button>
+                    <button className="calc-btn operator" onClick={() => inputOperation('÷')}>÷</button>
+                    <button className="calc-btn operator" onClick={() => inputOperation('×')}>×</button>
+                    <button className="calc-btn operator" onClick={() => inputOperation('-')}>-</button>
+                    <button className="calc-btn" onClick={() => inputNumber(7)}>7</button>
+                    <button className="calc-btn" onClick={() => inputNumber(8)}>8</button>
+                    <button className="calc-btn" onClick={() => inputNumber(9)}>9</button>
+                    <button className="calc-btn operator" onClick={() => inputOperation('+')}>+</button>
+                    <button className="calc-btn" onClick={() => inputNumber(4)}>4</button>
+                    <button className="calc-btn" onClick={() => inputNumber(5)}>5</button>
+                    <button className="calc-btn" onClick={() => inputNumber(6)}>6</button>
+                    <button className="calc-btn" onClick={() => inputNumber(1)}>1</button>
+                    <button className="calc-btn" onClick={() => inputNumber(2)}>2</button>
+                    <button className="calc-btn" onClick={() => inputNumber(3)}>3</button>
+                    <button className="calc-btn" onClick={() => inputNumber(0)} style={{gridColumn: 'span 2'}}>0</button>
+                    <button className="calc-btn operator" onClick={performCalculation}>=</button>
+                </div>
+            );
+        }
+
+        // Todo App Component
+        function TodoApp() {
+            const [todos, setTodos] = useState([]);
+            const [inputValue, setInputValue] = useState('');
+
+            const addTodo = () => {
+                if (inputValue.trim() !== '') {
+                    setTodos([...todos, { id: Date.now(), text: inputValue, completed: false }]);
+                    setInputValue('');
+                }
+            };
+
+            const toggleTodo = (id) => {
+                setTodos(todos.map(todo => 
+                    todo.id === id ? { ...todo, completed: !todo.completed } : todo
+                ));
+            };
+
+            const deleteTodo = (id) => {
+                setTodos(todos.filter(todo => todo.id !== id));
+            };
+
+            return (
+                <div className="todo-app">
+                    <div style={{display: 'flex', marginBottom: '1rem'}}>
+                        <input
+                            type="text"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && addTodo()}
+                            placeholder="Add a task..."
+                            className="todo-input"
+                        />
+                        <button onClick={addTodo} className="btn">Add</button>
+                    </div>
+                    <ul className="todo-list">
+                        {todos.map(todo => (
+                            <li key={todo.id} className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+                                <span onClick={() => toggleTodo(todo.id)} style={{cursor: 'pointer'}}>
+                                    {todo.text}
+                                </span>
+                                <button onClick={() => deleteTodo(todo.id)} className="btn btn-danger">
+                                    Delete
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        // Weather Widget Component
+        function WeatherWidget() {
+            const [weather, setWeather] = useState({
+                temp: 22,
+                condition: 'Sunny',
+                location: 'Ontario, Canada'
+            });
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    const conditions = ['Sunny', 'Cloudy', 'Rainy', 'Snowy', 'Clear'];
+                    const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
+                    const randomTemp = Math.floor(Math.random() * 35) - 10;
+                    
+                    setWeather({
+                        temp: randomTemp,
+                        condition: randomCondition,
+                        location: 'Ontario, Canada'
+                    });
+                }, 3000);
+
+                return () => clearInterval(interval);
+            }, []);
+
+            return (
+                <div className="weather-widget">
+                    <h4>{weather.location}</h4>
+                    <div className="weather-display">
+                        {weather.temp}°C
+                    </div>
+                    <p>{weather.condition}</p>
+                </div>
+            );
+        }
+
+
+         // Crypto Trading Simulator Component
+        function CryptoGame() {
+            const [price, setPrice] = useState(45000);
+            const [portfolio, setPortfolio] = useState(1000);
+            const [position, setPosition] = useState(0);
+            const [history, setHistory] = useState([45000]);
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setPrice(prev => {
+                        const change = (Math.random() - 0.5) * 2000;
+                        const newPrice = Math.max(1000, prev + change);
+                        setHistory(h => [...h.slice(-20), newPrice]);
+                        return newPrice;
+                    });
+                }, 1000);
+
+                return () => clearInterval(interval);
+            }, []);
+
+            const buy = () => {
+                if (portfolio >= price) {
+                    setPortfolio(p => p - price);
+                    setPosition(pos => pos + 1);
+                }
+            };
+
+            const sell = () => {
+                if (position > 0) {
+                    setPortfolio(p => p + price);
+                    setPosition(pos => pos - 1);
+                }
+            };
+
+            return (
+                <div className="crypto-game">
+                    <div className="crypto-price">BTC: ${price.toLocaleString()}</div>
+                    <div className="crypto-chart"></div>
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', margin: '0.5rem 0'}}>
+                        <span>Portfolio: ${portfolio.toFixed(2)}</span>
+                        <span>Position: {position} BTC</span>
+                    </div>
+                    <div className="crypto-controls">
+                        <button className="btn" onClick={buy} disabled={portfolio < price}>Buy</button>
+                        <button className="btn" onClick={sell} disabled={position === 0}>Sell</button>
+                    </div>
+                </div>
+            );
+        }
+
+        // AI Code Generator Component
+        function AIGenerator() {
+            const [input, setInput] = useState('');
+            const [output, setOutput] = useState('// AI-generated code will appear here...\n// Try typing: "create a function to sort an array"');
+            const [isGenerating, setIsGenerating] = useState(false);
+
+            const generateCode = () => {
+                if (!input.trim()) return;
+                
+                setIsGenerating(true);
+                setOutput('🤖 Generating code...');
+                
+                setTimeout(() => {
+                    const responses = {
+                        'sort': `function sortArray(arr) {
+    return arr.sort((a, b) => a - b);
+}
+
+// Usage example:
+const numbers = [3, 1, 4, 1, 5, 9, 2, 6];
+console.log(sortArray(numbers)); // [1, 1, 2, 3, 4, 5, 6, 9]`,
+                        'api': `async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+
+// Usage:
+fetchData('/api/users').then(users => console.log(users));`,
+                        'react': `import React, { useState } from 'react';
+
+function Counter() {
+    const [count, setCount] = useState(0);
+    
+    return (
+        <div>
+            <p>Count: {count}</p>
+            <button onClick={() => setCount(count + 1)}>
+                Increment
+            </button>
+        </div>
+    );
+}
+
+export default Counter;`,
+                        'default': `// AI detected your request: "${input}"
+function processUserInput(userInput) {
+    const keywords = userInput.toLowerCase().split(' ');
+    
+    if (keywords.includes('function')) {
+        return createFunction(userInput);
+    }
+    
+    return generateSolution(userInput);
+}
+
+// This is a simulated AI response
+console.log('Code generated successfully! 🚀');`
+                    };
+                    
+                    const key = Object.keys(responses).find(k => 
+                        input.toLowerCase().includes(k) && k !== 'default'
+                    ) || 'default';
+                    
+                    setOutput(responses[key]);
+                    setIsGenerating(false);
+                }, 1500);
+            };
+
+            return (
+                <div className="ai-generator">
+                    <textarea
+                        className="ai-input"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Describe the code you want to generate..."
+                    />
+                    <button 
+                        className="btn" 
+                        onClick={generateCode}
+                        disabled={isGenerating}
+                        style={{width: '100%', marginBottom: '1rem'}}
+                    >
+                        {isGenerating ? '🤖 Generating...' : '✨ Generate Code'}
+                    </button>
+                    <pre className="ai-output">{output}</pre>
+                </div>
+            );
+        }
+
+        // Neural Network Visualizer Component
+        function NeuralViz() {
+            const [neurons, setNeurons] = useState([]);
+
+            useEffect(() => {
+                const newNeurons = [];
+                for (let i = 0; i < 12; i++) {
+                    newNeurons.push({
+                        id: i,
+                        x: Math.random() * 280,
+                        y: Math.random() * 140,
+                        delay: Math.random() * 2
+                    });
+                }
+                setNeurons(newNeurons);
+            }, []);
+
+            return (
+                <div className="neural-network">
+                    {neurons.map(neuron => (
+                        <div
+                            key={neuron.id}
+                            className="neuron"
+                            style={{
+                                left: `${neuron.x}px`,
+                                top: `${neuron.y}px`,
+                                animationDelay: `${neuron.delay}s`
+                            }}
+                        />
+                    ))}
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '10px',
+                        left: '10px',
+                        color: '#667eea',
+                        fontSize: '0.8rem'
+                    }}>
+                        Neural Network Processing...
+                    </div>
+                </div>
+            );
+        }
+
+        // Blockchain Demo Component
+        function BlockchainDemo() {
+            const [blocks, setBlocks] = useState([
+                { id: 1, hash: 'Genesis', data: 'Initial Block' },
+                { id: 2, hash: 'A7B9C3', data: 'Transaction 1' },
+                { id: 3, hash: 'D4E8F2', data: 'Transaction 2' }
+            ]);
+
+            const addBlock = () => {
+                const newBlock = {
+                    id: blocks.length + 1,
+                    hash: Math.random().toString(36).substr(2, 6).toUpperCase(),
+                    data: `Transaction ${blocks.length}`
+                };
+                setBlocks([...blocks, newBlock]);
+            };
+
+            return (
+                <div>
+                    <div className="blockchain-chain">
+                        {blocks.map(block => (
+                            <div key={block.id} className="block">
+                                <div style={{fontSize: '0.7rem'}}>#{block.id}</div>
+                                <div>{block.hash}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <button className="btn" onClick={addBlock} style={{width: '100%'}}>
+                        ⛏️ Mine New Block
+                    </button>
+                </div>
+            );
+        }
+
+        // Analytics Dashboard Component
+        function AnalyticsDashboard() {
+            const [metrics, setMetrics] = useState({
+                users: 1234,
+                revenue: 45678,
+                conversion: 3.4,
+                traffic: 8901
+            });
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setMetrics(prev => ({
+                        users: prev.users + Math.floor(Math.random() * 10),
+                        revenue: prev.revenue + Math.floor(Math.random() * 100),
+                        conversion: (Math.random() * 5 + 2).toFixed(1),
+                        traffic: prev.traffic + Math.floor(Math.random() * 50)
+                    }));
+                }, 2000);
+
+                return () => clearInterval(interval);
+            }, []);
+
+            return (
+                <div className="analytics-grid">
+                    <div className="metric-card">
+                        <div>Active Users</div>
+                        <div className="metric-value">{metrics.users.toLocaleString()}</div>
+                    </div>
+                    <div className="metric-card">
+                        <div>Revenue</div>
+                        <div className="metric-value">${metrics.revenue.toLocaleString()}</div>
+                    </div>
+                    <div className="metric-card">
+                        <div>Conversion</div>
+                        <div className="metric-value">{metrics.conversion}%</div>
+                    </div>
+                    <div className="metric-card">
+                        <div>Traffic</div>
+                        <div className="metric-value">{metrics.traffic.toLocaleString()}</div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Quantum Maze Game Component
+        function QuantumMaze() {
+            const [maze, setMaze] = useState([]);
+            const [playerPos, setPlayerPos] = useState(0);
+            const [goalPos] = useState(35);
+
+            useEffect(() => {
+                const newMaze = Array(36).fill(0).map((_, i) => {
+                    if (i === 0) return 'player';
+                    if (i === 35) return 'goal';
+                    if (Math.random() < 0.3) return 'wall';
+                    if (Math.random() < 0.1) return 'quantum';
+                    return 'empty';
+                });
+                setMaze(newMaze);
+            }, []);
+
+            const movePlayer = (index) => {
+                if (maze[index] === 'wall') return;
+                
+                const newMaze = [...maze];
+                newMaze[playerPos] = 'empty';
+                newMaze[index] = 'player';
+                setMaze(newMaze);
+                setPlayerPos(index);
+                
+                if (index === goalPos) {
+                    alert('🎉 Quantum maze solved! Reality collapsed successfully!');
+                }
+            };
+
+            return (
+                <div className="quantum-maze">
+                    {maze.map((cell, index) => (
+                        <div
+                            key={index}
+                            className={`maze-cell ${cell}`}
+                            onClick={() => movePlayer(index)}
+                            title={cell === 'quantum' ? 'Quantum superposition cell' : ''}
+                        />
+                    ))}
+                </div>
+            );
+        }
+
+        // Security Scanner Component
+        function SecurityScanner() {
+            const [scanProgress, setScanProgress] = useState(0);
+            const [vulnerabilities, setVulnerabilities] = useState([]);
+            const [isScanning, setIsScanning] = useState(false);
+
+            const startScan = () => {
+                setIsScanning(true);
+                setScanProgress(0);
+                setVulnerabilities([]);
+                
+                const interval = setInterval(() => {
+                    setScanProgress(prev => {
+                        if (prev >= 100) {
+                            clearInterval(interval);
+                            setIsScanning(false);
+                            setVulnerabilities([
+                                { name: 'SQL Injection', severity: 'high' },
+                                { name: 'XSS Vulnerability', severity: 'medium' },
+                                { name: 'Weak Password Policy', severity: 'medium' },
+                                { name: 'Outdated Dependencies', severity: 'low' },
+                                { name: 'Missing HTTPS', severity: 'high' }
+                            ]);
+                            return 100;
+                        }
+                        return prev + 5;
+                    });
+                }, 100);
+            };
+
+            return (
+                <div className="security-scanner">
+                    <button 
+                        className="btn" 
+                        onClick={startScan} 
+                        disabled={isScanning}
+                        style={{width: '100%', marginBottom: '1rem'}}
+                    >
+                        {isScanning ? '🔍 Scanning...' : '🛡️ Start Security Scan'}
+                    </button>
+                    <div className="scan-progress">
+                        <div 
+                            className="scan-bar" 
+                            style={{width: `${scanProgress}%`}}
+                        />
+                    </div>
+                    <div style={{textAlign: 'center', margin: '0.5rem 0'}}>
+                        {scanProgress}% Complete
+                    </div>
+                    {vulnerabilities.length > 0 && (
+                        <div className="vulnerability-list">
+                            <h4>Vulnerabilities Found:</h4>
+                            {vulnerabilities.map((vuln, index) => (
+                                <div key={index} className="vuln-item">
+                                    <span>{vuln.name}</span>
+                                    <span className={`severity-${vuln.severity}`}>
+                                        {vuln.severity.toUpperCase()}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Smart Contract Builder Component
+        function SmartContractBuilder() {
+            const [contract, setContract] = useState('');
+            const [components] = useState([
+                'constructor', 'function', 'modifier', 'event', 'mapping', 'struct'
+            ]);
+
+            const addComponent = (component) => {
+                const templates = {
+                    'constructor': 'constructor() public {\n    // Initialize contract\n}\n\n',
+                    'function': 'function myFunction() public returns (uint) {\n    // Function logic\n    return 42;\n}\n\n',
+                    'modifier': 'modifier onlyOwner() {\n    require(msg.sender == owner);\n    _;\n}\n\n',
+                    'event': 'event Transfer(address indexed from, address indexed to, uint256 value);\n\n',
+                    'mapping': 'mapping(address => uint256) public balances;\n\n',
+                    'struct': 'struct User {\n    string name;\n    uint256 balance;\n}\n\n'
+                };
+                
+                setContract(prev => prev + templates[component]);
+            };
+
+            return (
+                <div className="contract-builder">
+                    <div className="contract-components">
+                        {components.map(comp => (
+                            <div
+                                key={comp}
+                                className="component-block"
+                                onClick={() => addComponent(comp)}
+                            >
+                                {comp}
+                            </div>
+                        ))}
+                    </div>
+                    <button 
+                        className="btn" 
+                        onClick={() => setContract('')}
+                        style={{width: '100%', margin: '0.5rem 0'}}
+                    >
+                        Clear Contract
+                    </button>
+                    <div className="contract-output">
+                        {contract || '// Your smart contract will appear here...\n// Click components above to build your contract'}
+                    </div>
+                </div>
+            );
+        }
+
+        // Render all components
+        ReactDOM.render(<CryptoGame />, document.getElementById('crypto-game'));
+        ReactDOM.render(<AIGenerator />, document.getElementById('ai-generator'));
+        ReactDOM.render(<NeuralViz />, document.getElementById('neural-viz'));
+        ReactDOM.render(<BlockchainDemo />, document.getElementById('blockchain-demo'));
+        ReactDOM.render(<AnalyticsDashboard />, document.getElementById('analytics-dashboard'));
+        ReactDOM.render(<QuantumMaze />, document.getElementById('quantum-maze'));
+        ReactDOM.render(<SecurityScanner />, document.getElementById('security-scanner'));
+        ReactDOM.render(<SmartContractBuilder />, document.getElementById('smart-contract'));
+
+        // Chart.js implementation
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Project Completion Rate',
+                    data: [65, 75, 80, 85, 90, 95],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

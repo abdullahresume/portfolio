@@ -1343,47 +1343,102 @@
 
         // Analytics Dashboard Component
         function AnalyticsDashboard() {
-            const [metrics, setMetrics] = useState({
-                users: 1234,
-                revenue: 45678,
-                conversion: 3.4,
-                traffic: 8901
+            const [userData, setUserData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    fetch("https://dummyjson.com/users")
+      .then(res => res.json())
+      .then(data => {
+        setUserData(data.users);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p>Loading dashboard...</p>;
+
+  const names = userData.map(u => u.firstName);
+  const ages = userData.map(u => u.age);
+  const heights = userData.map(u => u.height);
+  const genderCounts = {
+    male: userData.filter(u => u.gender === 'male').length,
+    female: userData.filter(u => u.gender === 'female').length
+  };
+
+  return (
+    <div style={{ padding: '2rem', background: 'white', borderRadius: '1rem', boxShadow: '0 0 20px rgba(0,0,0,0.05)', marginTop: '2rem' }}>
+      <h2 style={{ color: '#4F46E5', marginBottom: '1rem' }}>📊 Analytics Dashboard</h2>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', flexWrap: 'wrap' }}>
+        <div>
+          <h4>Age Distribution</h4>
+          <canvas id="barChart" height="150"></canvas>
+        </div>
+        <div>
+          <h4>Height Trend</h4>
+          <canvas id="lineChart" height="150"></canvas>
+        </div>
+        <div>
+          <h4>Gender Split</h4>
+          <canvas id="pieChart" height="150"></canvas>
+        </div>
+      </div>
+
+      {/* Chart Initialization */}
+      <script type="text/javascript">
+        {`
+          setTimeout(() => {
+            const names = ${JSON.stringify(names)};
+            const ages = ${JSON.stringify(ages)};
+            const heights = ${JSON.stringify(heights)};
+            const genderCounts = ${JSON.stringify(genderCounts)};
+
+            new Chart(document.getElementById('barChart'), {
+              type: 'bar',
+              data: {
+                labels: names,
+                datasets: [{
+                  label: 'Age',
+                  data: ages,
+                  backgroundColor: 'rgba(79,70,229,0.7)',
+                  borderRadius: 6
+                }]
+              },
+              options: { responsive: true, maintainAspectRatio: false }
             });
 
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    setMetrics(prev => ({
-                        users: prev.users + Math.floor(Math.random() * 10),
-                        revenue: prev.revenue + Math.floor(Math.random() * 100),
-                        conversion: (Math.random() * 5 + 2).toFixed(1),
-                        traffic: prev.traffic + Math.floor(Math.random() * 50)
-                    }));
-                }, 2000);
+            new Chart(document.getElementById('lineChart'), {
+              type: 'line',
+              data: {
+                labels: names,
+                datasets: [{
+                  label: 'Height (cm)',
+                  data: heights,
+                  borderColor: '#10B981',
+                  fill: false,
+                  tension: 0.4
+                }]
+              },
+              options: { responsive: true, maintainAspectRatio: false }
+            });
 
-                return () => clearInterval(interval);
-            }, []);
-
-            return (
-                <div className="analytics-grid">
-                    <div className="metric-card">
-                        <div>Active Users</div>
-                        <div className="metric-value">{metrics.users.toLocaleString()}</div>
-                    </div>
-                    <div className="metric-card">
-                        <div>Revenue</div>
-                        <div className="metric-value">${metrics.revenue.toLocaleString()}</div>
-                    </div>
-                    <div className="metric-card">
-                        <div>Conversion</div>
-                        <div className="metric-value">{metrics.conversion}%</div>
-                    </div>
-                    <div className="metric-card">
-                        <div>Traffic</div>
-                        <div className="metric-value">{metrics.traffic.toLocaleString()}</div>
-                    </div>
-                </div>
-            );
-        }
+            new Chart(document.getElementById('pieChart'), {
+              type: 'pie',
+              data: {
+                labels: ['Male', 'Female'],
+                datasets: [{
+                  data: [genderCounts.male, genderCounts.female],
+                  backgroundColor: ['#6366F1', '#EC4899']
+                }]
+              },
+              options: { responsive: true, maintainAspectRatio: false }
+            });
+          }, 500);
+        `}
+      </script>
+    </div>
+  );
+}
 
         // Quantum Maze Game Component
         function QuantumMaze() {

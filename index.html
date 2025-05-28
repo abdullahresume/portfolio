@@ -1178,72 +1178,91 @@
     );
 }        // AI Code Generator Component
         function AIGenerator() {
- const [prompt, setPrompt] = React.useState('');
-    const [output, setOutput] = React.useState('');
-    const [loading, setLoading] = React.useState(false);
+  const [language, setLanguage] = React.useState('javascript');
+  const [description, setDescription] = React.useState('');
+  const [output, setOutput] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
-    const generateCode = async () => {
-        if (!prompt.trim()) return;
-        setLoading(true);
-        setOutput('');
+  const generateCode = async () => {
+    if (!description.trim()) return;
+    setLoading(true);
+    setOutput('');
 
-        try {
-            const response = await fetch("https://api-inference.huggingface.co/models/Salesforce/codegen-350M-mono", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ inputs: prompt })
-            });
-            const data = await response.json();
+    try {
+      const response = await fetch('https://api.codepal.ai/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          language,
+          description
+        })
+      });
 
-            const result = data?.[0]?.generated_text || "// No valid output returned.";
-            setOutput(result);
-        } catch (err) {
-            setOutput("// Error fetching AI-generated code.");
-        }
+      const data = await response.json();
+      setOutput(data.code || '// No code generated.');
+    } catch (err) {
+      setOutput('// Error fetching code.');
+    }
 
-        setLoading(false);
-    };
+    setLoading(false);
+  };
 
-    return (
-        <div style={{ maxWidth: "800px", margin: "2rem auto", fontFamily: "sans-serif" }}>
-            <h2 style={{ color: "#10B981" }}>🧠 AI Code Generator</h2>
-            <textarea
-                rows="4"
-                style={{ width: "100%", padding: "1rem", borderRadius: "6px", border: "1px solid #ccc" }}
-                placeholder="e.g., Write a Python function to calculate factorial"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-            />
-            <button
-                onClick={generateCode}
-                style={{
-                    marginTop: "1rem",
-                    padding: "0.7rem 1.5rem",
-                    background: "#10B981",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "6px"
-                }}
-            >
-                {loading ? "Generating..." : "Generate"}
-            </button>
+  return (
+    <div style={{ maxWidth: '800px', margin: '2rem auto', fontFamily: 'sans-serif' }}>
+      <h2 style={{ color: '#10B981' }}>🧠 AI Code Generator</h2>
+      <div style={{ marginBottom: '1rem' }}>
+        <label style={{ marginRight: '1rem' }}>Language:</label>
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #ccc' }}
+        >
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="csharp">C#</option>
+          <option value="cpp">C++</option>
+        </select>
+      </div>
+      <textarea
+        rows="4"
+        style={{ width: '100%', padding: '1rem', borderRadius: '6px', border: '1px solid #ccc' }}
+        placeholder="Describe what code you want (e.g., 'create a React counter app')"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <button
+        onClick={generateCode}
+        style={{
+          marginTop: '1rem',
+          padding: '0.7rem 1.5rem',
+          background: '#10B981',
+          color: 'white',
+          border: 'none',
+          borderRadius: '6px'
+        }}
+      >
+        {loading ? 'Generating...' : 'Generate'}
+      </button>
 
-            {output && (
-                <pre style={{
-                    background: "#1F2937",
-                    color: "#D1FAE5",
-                    padding: "1rem",
-                    borderRadius: "6px",
-                    marginTop: "1rem",
-                    whiteSpace: "pre-wrap"
-                }}>
-                    {output}
-                </pre>
-            )}
-        </div>
-    );
+      {output && (
+        <pre
+          style={{
+            background: '#1F2937',
+            color: '#D1FAE5',
+            padding: '1rem',
+            borderRadius: '6px',
+            marginTop: '1rem',
+            whiteSpace: 'pre-wrap'
+          }}
+        >
+          {output}
+        </pre>
+      )}
+    </div>
+  );
 }
         // Neural Network Visualizer Component
         function NeuralViz() {

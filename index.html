@@ -1474,7 +1474,7 @@
   );
 }
 function CurrencyConverter() {
-  const [currencies, setCurrencies] = useState({});
+ const [currencies, setCurrencies] = useState({});
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('EUR');
   const [amount, setAmount] = useState(1);
@@ -1499,26 +1499,26 @@ function CurrencyConverter() {
 
   const getFlagUrl = (currencyCode) => {
     const countryCode = currencyCode.substring(0, 2).toLowerCase();
-    return `https://flagcdn.com/24x18/${countryCode}.png`;
+    return `https://flagcdn.com/32x24/${countryCode}.png`;
   };
 
   return (
-    <div className="card p-4 max-w-md mx-auto bg-white rounded-2xl shadow-lg space-y-4">
-      <h2 className="text-xl font-bold text-indigo-600">💱 Currency Converter</h2>
+    <div className="max-w-xl mx-auto bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl shadow-2xl p-8 text-white">
+      <h2 className="text-3xl font-bold mb-6 text-center">💱 Currency Converter</h2>
 
       <input
         type="number"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="w-full p-2 border rounded-md"
+        className="w-full p-3 rounded-xl text-gray-800 text-lg focus:outline-none mb-4"
         min="0"
       />
 
-      <div className="flex justify-between items-center space-x-4">
-        <div className="flex-1">
-          <label className="block text-sm font-medium">From:</label>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block text-sm mb-1">From:</label>
           <select
-            className="w-full p-2 border rounded-md"
+            className="w-full p-3 rounded-xl text-gray-800 focus:outline-none"
             value={fromCurrency}
             onChange={(e) => setFromCurrency(e.target.value)}
           >
@@ -1527,11 +1527,10 @@ function CurrencyConverter() {
             ))}
           </select>
         </div>
-
-        <div className="flex-1">
-          <label className="block text-sm font-medium">To:</label>
+        <div>
+          <label className="block text-sm mb-1">To:</label>
           <select
-            className="w-full p-2 border rounded-md"
+            className="w-full p-3 rounded-xl text-gray-800 focus:outline-none"
             value={toCurrency}
             onChange={(e) => setToCurrency(e.target.value)}
           >
@@ -1543,19 +1542,17 @@ function CurrencyConverter() {
       </div>
 
       {convertedAmount !== null && (
-        <div className="mt-4 p-3 bg-indigo-50 border border-indigo-200 rounded-md text-center">
-          <p className="text-sm">Converted Amount:</p>
-          <p className="text-lg font-semibold">
+        <div className="bg-white text-indigo-600 text-center rounded-xl py-4 mt-4">
+          <p className="text-sm">Converted Amount</p>
+          <p className="text-2xl font-bold">
             {convertedAmount} {toCurrency}
-            <img src={getFlagUrl(toCurrency)} alt={toCurrency} className="inline ml-2" />
+            <img src={getFlagUrl(toCurrency)} alt={toCurrency} className="inline ml-2 rounded" />
           </p>
         </div>
       )}
     </div>
   );
 }
-
-
 
 // WeatherDashboard.jsx
 
@@ -1575,23 +1572,23 @@ function WeatherDashboard() {
   };
 
   return (
-    <div className="card p-4 max-w-md mx-auto bg-white rounded-2xl shadow-lg space-y-4">
-      <h2 className="text-xl font-bold text-indigo-600">🌤️ Weather Dashboard</h2>
+    <div className="max-w-xl mx-auto bg-gradient-to-r from-cyan-500 to-blue-600 rounded-3xl shadow-2xl p-8 text-white">
+      <h2 className="text-3xl font-bold mb-6 text-center">🌤️ Weather Dashboard</h2>
       <input
         type="text"
         placeholder="Enter city name"
         value={city}
         onChange={(e) => setCity(e.target.value)}
-        className="w-full p-2 border rounded-md"
+        className="w-full p-3 rounded-xl text-gray-800 text-lg focus:outline-none mb-4"
       />
       <button
         onClick={getWeather}
-        className="w-full bg-indigo-600 text-white p-2 rounded-md"
+        className="w-full bg-white text-blue-600 font-semibold py-3 rounded-xl hover:bg-blue-100 transition"
       >
         Get Weather
       </button>
       {weather && (
-        <div className="mt-4 p-3 bg-indigo-50 border border-indigo-200 rounded-md text-center">
+        <div className="bg-white text-blue-800 text-center rounded-xl py-4 mt-6">
           <p><strong>Temperature:</strong> {weather.temperature}°C</p>
           <p><strong>Wind Speed:</strong> {weather.windspeed} km/h</p>
         </div>

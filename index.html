@@ -1207,7 +1207,7 @@
 });
 
       const data = await response.json();
-      setOutput(data.code || '// No code generated.');
+      setOutput(data.generated_text || '// No code generated.');
     } catch (err) {
       setOutput('// Error fetching code.');
     }

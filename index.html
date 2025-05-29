@@ -1432,13 +1432,23 @@
 
         // Security Scanner Component
         function SecurityScanner() {
-            const [url, setUrl] = React.useState('');
-  const [scanUrl, setScanUrl] = React.useState('');
+        const [url, setUrl] = useState('');
 
-  const handleScan = () => {
-    // This example uses Pentest-Tools — the scan link only works for public domains
-    if (url) {
-      setScanUrl(`https://pentest-tools.com/website-vulnerability-scanning/website-scanner?target=${encodeURIComponent(url)}`);
+  const handleScan = (scanner) => {
+    if (!url) return;
+    let scanUrl = '';
+    switch (scanner) {
+      case 'hostedscan':
+        scanUrl = `https://hostedscan.com/owasp-vulnerability-scan?target=${encodeURIComponent(url)}`;
+        break;
+      case 'internetsecure':
+        scanUrl = `https://internetsecure.org/?q=${encodeURIComponent(url)}`;
+        break;
+      default:
+        break;
+    }
+    if (scanUrl) {
+      window.open(scanUrl, '_blank');
     }
   };
 
@@ -1447,30 +1457,25 @@
       <h2 style={{ color: '#4F46E5' }}>🛡️ Website Security Scanner</h2>
       <input
         type="text"
-        placeholder="Enter website URL (e.g. https://example.com)"
+        placeholder="Enter website URL (e.g., https://example.com)"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         style={{ padding: '0.5rem', width: '100%', borderRadius: '8px', marginBottom: '1rem' }}
       />
-      <button
-        onClick={handleScan}
-        style={{ padding: '0.5rem 1rem', backgroundColor: '#4F46E5', color: 'white', borderRadius: '8px' }}
-      >
-        Start Scan
-      </button>
-
-      {scanUrl && (
-        <div style={{ marginTop: '2rem' }}>
-          <p>Embedded scanner (from Pentest-Tools):</p>
-          <iframe
-            src={scanUrl}
-            width="100%"
-            height="600px"
-            title="Scan Result"
-            style={{ border: '1px solid #ccc', borderRadius: '8px' }}
-          />
-        </div>
-      )}
+      <div>
+        <button
+          onClick={() => handleScan('hostedscan')}
+          style={{ padding: '0.5rem 1rem', marginRight: '1rem', backgroundColor: '#4F46E5', color: 'white', borderRadius: '8px' }}
+        >
+          Scan with HostedScan
+        </button>
+        <button
+          onClick={() => handleScan('internetsecure')}
+          style={{ padding: '0.5rem 1rem', backgroundColor: '#10B981', color: 'white', borderRadius: '8px' }}
+        >
+          Scan with InternetSecure
+        </button>
+      </div>
     </div>
   );
 }

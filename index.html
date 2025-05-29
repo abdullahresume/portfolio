@@ -1433,64 +1433,47 @@
         // Security Scanner Component
         function SecurityScanner() {
             const [url, setUrl] = React.useState('');
-    const [loading, setLoading] = React.useState(false);
-    const [result, setResult] = React.useState(null);
-    const [error, setError] = React.useState(null);
+  const [scanUrl, setScanUrl] = React.useState('');
 
-    const handleScan = async () => {
-      if (!url) {
-        setError('Please enter a valid URL.');
-        return;
-      }
+  const handleScan = () => {
+    // This example uses Pentest-Tools — the scan link only works for public domains
+    if (url) {
+      setScanUrl(`https://pentest-tools.com/website-vulnerability-scanning/website-scanner?target=${encodeURIComponent(url)}`);
+    }
+  };
 
-      setLoading(true);
-      setResult(null);
-      setError(null);
+  return (
+    <div style={{ padding: '2rem', background: '#f9fafb', borderRadius: '1rem', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
+      <h2 style={{ color: '#4F46E5' }}>🛡️ Website Security Scanner</h2>
+      <input
+        type="text"
+        placeholder="Enter website URL (e.g. https://example.com)"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        style={{ padding: '0.5rem', width: '100%', borderRadius: '8px', marginBottom: '1rem' }}
+      />
+      <button
+        onClick={handleScan}
+        style={{ padding: '0.5rem 1rem', backgroundColor: '#4F46E5', color: 'white', borderRadius: '8px' }}
+      >
+        Start Scan
+      </button>
 
-      try {
-        const response = await fetch(`https://sitecheck.sucuri.net/api/v3/?scan=${encodeURIComponent(url)}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setResult(data);
-      } catch (err) {
-        setError('An error occurred while scanning the website.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    return (
-      <div style={{ padding: '2rem', background: '#f9fafb', borderRadius: '1rem', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ color: '#4F46E5', marginBottom: '1rem' }}>🛡️ Cybersecurity Website Scanner</h2>
-        <input
-          type="text"
-          placeholder="Enter website URL (e.g., https://example.com)"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid #ccc', marginBottom: '1rem' }}
-        />
-        <button
-          onClick={handleScan}
-          style={{ padding: '0.5rem 1rem', backgroundColor: '#4F46E5', color: '#fff', border: 'none', borderRadius: '0.5rem' }}
-        >
-          {loading ? 'Scanning...' : 'Scan Website'}
-        </button>
-
-        {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
-
-        {result && (
-          <div style={{ marginTop: '2rem' }}>
-            <h3>Scan Results for {url}</h3>
-            <pre style={{ background: '#fff', padding: '1rem', borderRadius: '0.5rem', overflowX: 'auto' }}>
-              {JSON.stringify(result, null, 2)}
-            </pre>
-          </div>
-        )}
-      </div>
-    );
-  }
+      {scanUrl && (
+        <div style={{ marginTop: '2rem' }}>
+          <p>Embedded scanner (from Pentest-Tools):</p>
+          <iframe
+            src={scanUrl}
+            width="100%"
+            height="600px"
+            title="Scan Result"
+            style={{ border: '1px solid #ccc', borderRadius: '8px' }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
 
         // Smart Contract Builder Component
         function SmartContractBuilder() {

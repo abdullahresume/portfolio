@@ -1652,7 +1652,14 @@ function WeatherDashboard() {
 }
 
         function InvoicePDF() {
-            const [items, setItems] = useState([{ description: '', quantity: 1, price: 0 }]);
+            const [company, setCompany] = useState('My Company Inc.');
+  const [client, setClient] = useState('Client Name');
+  const [invoiceNumber, setInvoiceNumber] = useState('INV-001');
+  const [taxRate, setTaxRate] = useState(0);
+  const [status, setStatus] = useState('Unpaid');
+  const [items, setItems] = useState([
+    { description: '', quantity: 1, price: 0 }
+  ]);
 
   const handleItemChange = (index, field, value) => {
     const updated = [...items];
@@ -1661,59 +1668,86 @@ function WeatherDashboard() {
   };
 
   const addItem = () => setItems([...items, { description: '', quantity: 1, price: 0 }]);
+  const removeItem = (i) => setItems(items.filter((_, idx) => idx !== i));
 
-  const removeItem = (index) => {
-    const updated = items.filter((_, i) => i !== index);
-    setItems(updated);
-  };
-
-  const total = items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+  const subtotal = items.reduce((acc, i) => acc + i.quantity * i.price, 0);
+  const tax = subtotal * (taxRate / 100);
+  const total = subtotal + tax;
 
   const downloadPDF = () => {
-  const doc = new window.jspdf.jsPDF(); 
-  doc.setFontSize(16);
-  doc.text("🧾 Invoice", 10, 10);
-  items.forEach((item, i) => {
-    const y = 20 + i * 10;
-    doc.text(`${item.description} - ${item.quantity} × $${item.price}`, 10, y);
-  });
-  doc.text(`Total: $${total}`, 10, 30 + items.length * 10);
-  doc.save("invoice.pdf");
-};
+    const doc = new window.jspdf.jsPDF();
+
+    doc.setFontSize(18);
+    doc.text(company, 20, 20);
+    doc.setFontSize(12);
+    doc.text(`Invoice #: ${invoiceNumber}`, 20, 30);
+    doc.text(`Client: ${client}`, 20, 37);
+    doc.text(`Status: ${status}`, 20, 44);
+
+    doc.setLineWidth(0.5);
+    doc.line(20, 50, 190, 50);
+
+    doc.setFontSize(12);
+    doc.text('Description', 20, 58);
+    doc.text('Qty', 100, 58);
+    doc.text('Price', 130, 58);
+    doc.text('Total', 160, 58);
+
+    let y = 65;
+    items.forEach((item) => {
+      doc.text(item.description, 20, y);
+      doc.text(item.quantity.toString(), 100, y);
+      doc.text(`$${item.price.toFixed(2)}`, 130, y);
+      doc.text(`$${(item.quantity * item.price).toFixed(2)}`, 160, y);
+      y += 10;
+    });
+
+    doc.line(20, y, 190, y);
+    y += 10;
+    doc.text(`Subtotal: $${subtotal.toFixed(2)}`, 130, y);
+    y += 7;
+    doc.text(`Tax (${taxRate}%): $${tax.toFixed(2)}`, 130, y);
+    y += 7;
+    doc.text(`Total: $${total.toFixed(2)}`, 130, y);
+
+    doc.save(`${invoiceNumber}.pdf`);
+  };
 
   return (
-    <div className="card  w-full h-full p-4 max-w-xl mx-auto bg-white rounded-xl shadow-lg space-y-4">
-      <h2 className="text-xl font-bold text-indigo-600">🧾 Invoice Builder</h2>
+    <div className="card p-6 max-w-2xl mx-auto bg-white rounded-xl shadow-lg space-y-6">
+      <h2 className="text-xl font-bold text-indigo-600">🧾 Invoice Generator</h2>
 
-      {items.map((item, index) => (
-        <div key={index} className="flex gap-2 items-center">
-          <input
-            type="text"
-            placeholder="Description"
-            value={item.description}
-            onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-            className="flex-1 p-2 border rounded-md"
-          />
-          <input
-            type="number"
-            min="1"
-            value={item.quantity}
-            onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-            className="w-20 p-2 border rounded-md"
-          />
-          <input
-            type="number"
-            value={item.price}
-            onChange={(e) => handleItemChange(index, 'price', e.target.value)}
-            className="w-24 p-2 border rounded-md"
-          />
-          <button onClick={() => removeItem(index)} className="text-red-500">✕</button>
+      <div className="grid grid-cols-2 gap-4">
+        <input type="text" className="border p-2 rounded" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Your Company Name" />
+        <input type="text" className="border p-2 rounded" value={client} onChange={(e) => setClient(e.target.value)} placeholder="Client Name" />
+        <input type="text" className="border p-2 rounded" value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} placeholder="Invoice #" />
+        <select className="border p-2 rounded" value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option>Unpaid</option>
+          <option>Paid</option>
+        </select>
+      </div>
+
+      <div className="flex gap-2 items-center">
+        <label className="text-sm">Tax %:</label>
+        <input type="number" min="0" className="w-20 border p-1 rounded" value={taxRate} onChange={(e) => setTaxRate(Number(e.target.value))} />
+      </div>
+
+      {items.map((item, i) => (
+        <div key={i} className="flex gap-2 items-center">
+          <input className="flex-1 p-2 border rounded" placeholder="Item" value={item.description} onChange={(e) => handleItemChange(i, 'description', e.target.value)} />
+          <input type="number" min="1" className="w-20 p-2 border rounded" value={item.quantity} onChange={(e) => handleItemChange(i, 'quantity', e.target.value)} />
+          <input type="number" className="w-24 p-2 border rounded" value={item.price} onChange={(e) => handleItemChange(i, 'price', e.target.value)} />
+          <button onClick={() => removeItem(i)} className="text-red-500">✕</button>
         </div>
       ))}
 
-      <button onClick={addItem} className="bg-green-500 text-white px-4 py-2 rounded-md">Add Item</button>
-      <div className="text-right font-bold text-lg">Total: ${total.toFixed(2)}</div>
-      <button onClick={downloadPDF} className="bg-indigo-600 text-white px-4 py-2 rounded-md w-full">
+      <button onClick={addItem} className="bg-green-500 text-white px-4 py-2 rounded">Add Line Item</button>
+
+      <div className="text-right font-bold text-lg">
+        Total: ${total.toFixed(2)}
+      </div>
+
+      <button onClick={downloadPDF} className="bg-indigo-600 text-white w-full py-2 rounded hover:bg-indigo-700 transition">
         Download PDF
       </button>
     </div>

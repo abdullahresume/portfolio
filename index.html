@@ -849,7 +849,7 @@
                 </div>
                 
                 <div class="project-card">
-                    <h3>📊 Real-time Analytics Dashboard</h3>
+                    <h3>📊 Weather Dashboard</h3>
                     <p>Live data streaming dashboard with multiple chart types and filtering capabilities.</p>
                     <div id="analytics-dashboard" class="project-demo"></div>
                 </div>
@@ -1480,99 +1480,142 @@
   );
 }
 function CurrencyConverter() {
-  const [currencies, setCurrencies] = useState([]);
+  const [currencies, setCurrencies] = useState({});
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('EUR');
   const [amount, setAmount] = useState(1);
   const [convertedAmount, setConvertedAmount] = useState(null);
 
   useEffect(() => {
-    fetch('https://api.exchangerate.host/symbols')
+    fetch('https://api.frankfurter.app/currencies')
       .then(res => res.json())
-      .then(data => setCurrencies(Object.keys(data.symbols)));
+      .then(data => setCurrencies(data));
   }, []);
 
   useEffect(() => {
-    if (fromCurrency && toCurrency && amount) {
-      fetch(`https://api.exchangerate.host/convert?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`)
+    if (fromCurrency && toCurrency && amount && fromCurrency !== toCurrency) {
+      fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${fromCurrency}&to=${toCurrency}`)
         .then(res => res.json())
-        .then(data => setConvertedAmount(data.result));
+        .then(data => setConvertedAmount(data.rates[toCurrency]))
+        .catch(() => setConvertedAmount('Error'));
+    } else if (fromCurrency === toCurrency) {
+      setConvertedAmount(amount);
     }
   }, [fromCurrency, toCurrency, amount]);
 
+  const getFlagUrl = (currencyCode) => {
+    const countryCode = currencyCode.substring(0, 2).toLowerCase();
+    return `https://flagcdn.com/24x18/${countryCode}.png`;
+  };
+
   return (
-    <div className="card">
-      <h2>Currency Converter</h2>
-      <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
-      <select value={fromCurrency} onChange={(e) => setFromCurrency(e.target.value)}>
-        {currencies.map(curr => <option key={curr}>{curr}</option>)}
-      </select>
-      <span> to </span>
-      <select value={toCurrency} onChange={(e) => setToCurrency(e.target.value)}>
-        {currencies.map(curr => <option key={curr}>{curr}</option>)}
-      </select>
-      <div>
-        <strong>Result:</strong> {convertedAmount ? `${convertedAmount} ${toCurrency}` : 'Calculating...'}
+    <div className="card p-4 max-w-md mx-auto bg-white rounded-2xl shadow-lg space-y-4">
+      <h2 className="text-xl font-bold text-indigo-600">💱 Currency Converter</h2>
+
+      <input
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        className="w-full p-2 border rounded-md"
+        min="0"
+      />
+
+      <div className="flex justify-between items-center space-x-4">
+        <div className="flex-1">
+          <label className="block text-sm font-medium">From:</label>
+          <select
+            className="w-full p-2 border rounded-md"
+            value={fromCurrency}
+            onChange={(e) => setFromCurrency(e.target.value)}
+          >
+            {Object.keys(currencies).map(code => (
+              <option key={code} value={code}>{code} - {currencies[code]}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex-1">
+          <label className="block text-sm font-medium">To:</label>
+          <select
+            className="w-full p-2 border rounded-md"
+            value={toCurrency}
+            onChange={(e) => setToCurrency(e.target.value)}
+          >
+            {Object.keys(currencies).map(code => (
+              <option key={code} value={code}>{code} - {currencies[code]}</option>
+            ))}
+          </select>
+        </div>
       </div>
+
+      {convertedAmount !== null && (
+        <div className="mt-4 p-3 bg-indigo-50 border border-indigo-200 rounded-md text-center">
+          <p className="text-sm">Converted Amount:</p>
+          <p className="text-lg font-semibold">
+            {convertedAmount} {toCurrency}
+            <img src={getFlagUrl(toCurrency)} alt={toCurrency} className="inline ml-2" />
+          </p>
+        </div>
+      )}
     </div>
   );
-};
-        // Smart Contract Builder Component
-        function SmartContractBuilder() {
-            const [contract, setContract] = useState('');
-            const [components] = useState([
-                'constructor', 'function', 'modifier', 'event', 'mapping', 'struct'
-            ]);
+}
 
-            const addComponent = (component) => {
-                const templates = {
-                    'constructor': 'constructor() public {\n    // Initialize contract\n}\n\n',
-                    'function': 'function myFunction() public returns (uint) {\n    // Function logic\n    return 42;\n}\n\n',
-                    'modifier': 'modifier onlyOwner() {\n    require(msg.sender == owner);\n    _;\n}\n\n',
-                    'event': 'event Transfer(address indexed from, address indexed to, uint256 value);\n\n',
-                    'mapping': 'mapping(address => uint256) public balances;\n\n',
-                    'struct': 'struct User {\n    string name;\n    uint256 balance;\n}\n\n'
-                };
-                
-                setContract(prev => prev + templates[component]);
-            };
 
-            return (
-                <div className="contract-builder">
-                    <div className="contract-components">
-                        {components.map(comp => (
-                            <div
-                                key={comp}
-                                className="component-block"
-                                onClick={() => addComponent(comp)}
-                            >
-                                {comp}
-                            </div>
-                        ))}
-                    </div>
-                    <button 
-                        className="btn" 
-                        onClick={() => setContract('')}
-                        style={{width: '100%', margin: '0.5rem 0'}}
-                    >
-                        Clear Contract
-                    </button>
-                    <div className="contract-output">
-                        {contract || '// Your smart contract will appear here...\n// Click components above to build your contract'}
-                    </div>
-                </div>
-            );
-        }
+
+// WeatherDashboard.jsx
+
+function WeatherDashboard() = {
+  const [city, setCity] = useState('');
+  const [weather, setWeather] = useState(null);
+
+  const getWeather = async () => {
+    const locationRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
+    const locationData = await locationRes.json();
+    if (!locationData.results || locationData.results.length === 0) return alert('City not found');
+
+    const { latitude, longitude } = locationData.results[0];
+    const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
+    const weatherData = await weatherRes.json();
+    setWeather(weatherData.current_weather);
+  };
+
+  return (
+    <div className="card p-4 max-w-md mx-auto bg-white rounded-2xl shadow-lg space-y-4">
+      <h2 className="text-xl font-bold text-indigo-600">🌤️ Weather Dashboard</h2>
+      <input
+        type="text"
+        placeholder="Enter city name"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        className="w-full p-2 border rounded-md"
+      />
+      <button
+        onClick={getWeather}
+        className="w-full bg-indigo-600 text-white p-2 rounded-md"
+      >
+        Get Weather
+      </button>
+      {weather && (
+        <div className="mt-4 p-3 bg-indigo-50 border border-indigo-200 rounded-md text-center">
+          <p><strong>Temperature:</strong> {weather.temperature}°C</p>
+          <p><strong>Wind Speed:</strong> {weather.windspeed} km/h</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 
         // Render all components
         ReactDOM.render(<CryptoGame />, document.getElementById('crypto-game'));
         ReactDOM.render(<AIGenerator />, document.getElementById('ai-generator'));
         ReactDOM.render(<CurrencyConverter />, document.getElementById('neural-viz'));
         ReactDOM.render(<BlockchainDemo />, document.getElementById('blockchain-demo'));
-        ReactDOM.render(<AnalyticsDashboard />, document.getElementById('analytics-dashboard'));
+        ReactDOM.render(<WeatherDashboard/>, document.getElementById('analytics-dashboard'));
         ReactDOM.render(<QuantumMaze />, document.getElementById('quantum-maze'));
         ReactDOM.render(<SecurityScanner />, document.getElementById('security-scanner'));
-        ReactDOM.render(<SmartContractBuilder />, document.getElementById('smart-contract'));
+        
 
         // Chart.js implementation
         const ctx = document.getElementById('myChart').getContext('2d');

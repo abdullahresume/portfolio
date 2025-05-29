@@ -837,7 +837,7 @@
                 </div>
                 
                 <div class="project-card">
-                    <h3>🌐 3D Neural Network Visualizer</h3>
+                    <h3>🌐 Currency Converter</h3>
                     <p>Interactive 3D visualization of neural network architecture with animated data flow.</p>
                     <div id="neural-viz" class="project-demo"></div>
                 </div>
@@ -1479,7 +1479,44 @@
     </div>
   );
 }
+function CurrencyConverter() {
+  const [currencies, setCurrencies] = useState([]);
+  const [fromCurrency, setFromCurrency] = useState('USD');
+  const [toCurrency, setToCurrency] = useState('EUR');
+  const [amount, setAmount] = useState(1);
+  const [convertedAmount, setConvertedAmount] = useState(null);
 
+  useEffect(() => {
+    fetch('https://api.exchangerate.host/symbols')
+      .then(res => res.json())
+      .then(data => setCurrencies(Object.keys(data.symbols)));
+  }, []);
+
+  useEffect(() => {
+    if (fromCurrency && toCurrency && amount) {
+      fetch(`https://api.exchangerate.host/convert?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`)
+        .then(res => res.json())
+        .then(data => setConvertedAmount(data.result));
+    }
+  }, [fromCurrency, toCurrency, amount]);
+
+  return (
+    <div className="card">
+      <h2>Currency Converter</h2>
+      <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+      <select value={fromCurrency} onChange={(e) => setFromCurrency(e.target.value)}>
+        {currencies.map(curr => <option key={curr}>{curr}</option>)}
+      </select>
+      <span> to </span>
+      <select value={toCurrency} onChange={(e) => setToCurrency(e.target.value)}>
+        {currencies.map(curr => <option key={curr}>{curr}</option>)}
+      </select>
+      <div>
+        <strong>Result:</strong> {convertedAmount ? `${convertedAmount} ${toCurrency}` : 'Calculating...'}
+      </div>
+    </div>
+  );
+};
         // Smart Contract Builder Component
         function SmartContractBuilder() {
             const [contract, setContract] = useState('');
@@ -1530,7 +1567,7 @@
         // Render all components
         ReactDOM.render(<CryptoGame />, document.getElementById('crypto-game'));
         ReactDOM.render(<AIGenerator />, document.getElementById('ai-generator'));
-        ReactDOM.render(<NeuralViz />, document.getElementById('neural-viz'));
+        ReactDOM.render(<CurrencyConverter />, document.getElementById('neural-viz'));
         ReactDOM.render(<BlockchainDemo />, document.getElementById('blockchain-demo'));
         ReactDOM.render(<AnalyticsDashboard />, document.getElementById('analytics-dashboard'));
         ReactDOM.render(<QuantumMaze />, document.getElementById('quantum-maze'));

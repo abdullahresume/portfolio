@@ -8,6 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -843,8 +844,8 @@
                 </div>
                 
                 <div class="project-card">
-                    <h3>🔐 Blockchain Explorer</h3>
-                    <p>Mini blockchain implementation with transaction creation and block mining simulation.</p>
+                    <h3>🔐 Invoice PDF</h3>
+                    <p>Mini project involving creating an invoice and download it as PDF</p>
                     <div id="blockchain-demo" class="project-demo"></div>
                 </div>
                 
@@ -854,11 +855,7 @@
                     <div id="analytics-dashboard" class="project-demo"></div>
                 </div>
                 
-                <div class="project-card">
-                    <h3>🎮 Quantum Maze Game</h3>
-                    <p>Physics-based puzzle game demonstrating quantum computing principles.</p>
-                    <div id="quantum-maze" class="project-demo"></div>
-                </div>
+          
                 
                 <div class="project-card">
                     <h3>🔍 Cybersecurity Scanner</h3>
@@ -1638,14 +1635,82 @@ function WeatherDashboard() {
   );
 }
 
+        function InvoicePDF() {
+            const [items, setItems] = useState([{ description: '', quantity: 1, price: 0 }]);
+
+  const handleItemChange = (index, field, value) => {
+    const updated = [...items];
+    updated[index][field] = field === 'description' ? value : Number(value);
+    setItems(updated);
+  };
+
+  const addItem = () => setItems([...items, { description: '', quantity: 1, price: 0 }]);
+
+  const removeItem = (index) => {
+    const updated = items.filter((_, i) => i !== index);
+    setItems(updated);
+  };
+
+  const total = items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("🧾 Invoice", 10, 10);
+    items.forEach((item, i) => {
+      const y = 20 + i * 10;
+      doc.text(`${item.description} - ${item.quantity} × $${item.price}`, 10, y);
+    });
+    doc.text(`Total: $${total}`, 10, 30 + items.length * 10);
+    doc.save("invoice.pdf");
+  };
+
+  return (
+    <div className="card p-4 max-w-xl mx-auto bg-white rounded-xl shadow-lg space-y-4">
+      <h2 className="text-xl font-bold text-indigo-600">🧾 Invoice Builder</h2>
+
+      {items.map((item, index) => (
+        <div key={index} className="flex gap-2 items-center">
+          <input
+            type="text"
+            placeholder="Description"
+            value={item.description}
+            onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+            className="flex-1 p-2 border rounded-md"
+          />
+          <input
+            type="number"
+            min="1"
+            value={item.quantity}
+            onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+            className="w-20 p-2 border rounded-md"
+          />
+          <input
+            type="number"
+            value={item.price}
+            onChange={(e) => handleItemChange(index, 'price', e.target.value)}
+            className="w-24 p-2 border rounded-md"
+          />
+          <button onClick={() => removeItem(index)} className="text-red-500">✕</button>
+        </div>
+      ))}
+
+      <button onClick={addItem} className="bg-green-500 text-white px-4 py-2 rounded-md">Add Item</button>
+      <div className="text-right font-bold text-lg">Total: ${total.toFixed(2)}</div>
+      <button onClick={downloadPDF} className="bg-indigo-600 text-white px-4 py-2 rounded-md w-full">
+        Download PDF
+      </button>
+    </div>
+  );
+}
+
 
         // Render all components
         ReactDOM.render(<CryptoGame />, document.getElementById('crypto-game'));
         ReactDOM.render(<AIGenerator />, document.getElementById('ai-generator'));
         ReactDOM.render(<CurrencyConverter />, document.getElementById('neural-viz'));
-        ReactDOM.render(<BlockchainDemo />, document.getElementById('blockchain-demo'));
+        ReactDOM.render(<InvoicePDF />, document.getElementById('blockchain-demo'));
         ReactDOM.render(<WeatherDashboard/>, document.getElementById('analytics-dashboard'));
-        ReactDOM.render(<QuantumMaze />, document.getElementById('quantum-maze'));
         ReactDOM.render(<SecurityScanner />, document.getElementById('security-scanner'));
         
 

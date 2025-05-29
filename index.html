@@ -1191,30 +1191,33 @@
   const [loading, setLoading] = React.useState(false);
 
   const generateCode = async () => {
-    if (!description.trim()) return;
-    setLoading(true);
-    setOutput('');
+  if (!description.trim()) return;
+  setLoading(true);
+  setOutput('');
 
-    try {
-      const response = await fetch('https://ai-api-m176.vercel.app/api/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-         body: JSON.stringify({
-    prompt: `Generate a ${language} function that ${description}`
-  })
-});
+  try {
+    const response = await fetch('https://ai-api-m176.vercel.app/api/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        prompt: `Generate a ${language} function that ${description}`
+      })
+    });
 
-      const data = await response.json();
-      setOutput(data.generated_text || '// No code generated.');
-    } catch (err) {
-      setOutput('// Error fetching code.');
-    }
+    const data = await response.json();
+    console.log('HF API response:', data);
 
-    setLoading(false);
-  };
+    // Adjust this based on what the console shows
+    setOutput(data.generated_text || data[0]?.generated_text || '// No code generated.');
+  } catch (err) {
+    console.error(err);
+    setOutput('// Error fetching code.');
+  }
 
+  setLoading(false);
+};
   return (
     <div style={{ maxWidth: '800px', margin: '2rem auto', fontFamily: 'sans-serif' }}>
       <h2 style={{ color: '#10B981' }}>🧠 AI Code Generator</h2>

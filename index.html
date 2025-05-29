@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abdullah Ali - Software Engineer Portfolio</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.0/chart.min.js"></script>
@@ -625,6 +626,21 @@
                 align-items: center;
             }
         }
+        .btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+  }
     </style>
 </head>
 <body>
@@ -1654,16 +1670,16 @@ function WeatherDashboard() {
   const total = items.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
   const downloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("🧾 Invoice", 10, 10);
-    items.forEach((item, i) => {
-      const y = 20 + i * 10;
-      doc.text(`${item.description} - ${item.quantity} × $${item.price}`, 10, y);
-    });
-    doc.text(`Total: $${total}`, 10, 30 + items.length * 10);
-    doc.save("invoice.pdf");
-  };
+  const doc = new window.jspdf.jsPDF(); 
+  doc.setFontSize(16);
+  doc.text("🧾 Invoice", 10, 10);
+  items.forEach((item, i) => {
+    const y = 20 + i * 10;
+    doc.text(`${item.description} - ${item.quantity} × $${item.price}`, 10, y);
+  });
+  doc.text(`Total: $${total}`, 10, 30 + items.length * 10);
+  doc.save("invoice.pdf");
+};
 
   return (
     <div className="card p-4 max-w-xl mx-auto bg-white rounded-xl shadow-lg space-y-4">

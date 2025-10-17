@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdullah Ali - Software Engineer Portfolio</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/4.4.0/chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <title>Abdullah Ali - AI Engineer & Security Specialist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
+        :root {
+            --neon-blue: #00D4FF;
+            --neon-purple: #E500FF;
+            --primary-orange: #F59E0B;
+            --darker: #020617;
+            --dark: #0F172A;
+            --gray: #64748B;
+            --light-gray: #94A3B8;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,43 +30,88 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: white;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            transition: all 0.1s ease;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            mix-blend-mode: difference;
         }
 
-        .nav {
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+            z-index: 9998;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 10px;
+        }
+
+        /* Navigation */
+        nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(2, 6, 23, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
             z-index: 1000;
             padding: 1rem 0;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
-        .nav-content {
+        nav.scrolled {
+            background: rgba(2, 6, 23, 0.98);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            padding: 0.7rem 0;
+        }
+
+        .nav-container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
         }
 
         .logo {
             font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
         .nav-links {
@@ -64,80 +121,707 @@
         }
 
         .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            color: #333;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            transition: width 0.3s ease;
         }
 
         .nav-links a:hover {
-            color: #667eea;
-        }
-
-        .section {
-            margin: 100px 0;
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 4rem 2rem;
-            margin-top: 80px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
             color: white;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
         }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #fff, #e0e7ff);
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 120px 2rem 60px;
+        }
+
+        .grid-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: particleFloat 15s infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(-10vh) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-20vh) scale(0);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 4;
+            max-width: 1000px;
+            animation: heroReveal 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes heroReveal {
+            from {
+                opacity: 0;
+                transform: translateY(100px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            padding: 10px 25px;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--neon-blue);
+            font-weight: 600;
+            animation: badgeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.6); }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, var(--neon-blue) 25%, var(--neon-purple) 75%, #ffffff 100%);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            animation: titleShimmer 4s ease-in-out infinite;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+        @keyframes titleShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
-        .contact-info {
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .hero-contact {
             display: flex;
+            gap: 1.5rem;
             justify-content: center;
-            gap: 2rem;
             flex-wrap: wrap;
+            margin-bottom: 3rem;
         }
 
         .contact-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255,255,255,0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
+            background: var(--glass);
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
         }
 
+        .contact-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--neon-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .contact-item i {
+            color: var(--neon-blue);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            padding: 18px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.4);
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(229, 0, 255, 0.5);
+        }
+
+        .btn-primary:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 100px 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, white, var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            animation: lineGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes lineGlow {
+            0%, 100% {
+                width: 100px;
+                opacity: 0.5;
+            }
+            50% {
+                width: 200px;
+                opacity: 1;
+            }
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--light-gray);
+            max-width: 700px;
+            margin: 2rem auto 0;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+            gap: 3rem;
+        }
+
+        .project-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3), 0 0 50px rgba(0, 212, 255, 0.2);
+            border-color: var(--neon-blue);
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            transition: all 0.5s ease;
+            flex-shrink: 0;
+        }
+
+        .project-card:hover .project-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .project-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .project-description {
+            color: var(--light-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .project-demo {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            min-height: 280px;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .tag {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--neon-blue);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        /* Common Elements */
+        .btn {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Input Styles */
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        .voice-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+        }
+
+        .voice-btn:hover {
+            background: rgba(239, 68, 68, 0.4);
+            transform: scale(1.1);
+        }
+
+        .voice-btn.active {
+            background: rgba(239, 68, 68, 0.6);
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+        }
+
+        .voice-btn i {
+            color: #EF4444;
+        }
+
+        .image-upload-btn {
+            background: rgba(0, 212, 255, 0.2);
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload-btn:hover {
+            background: rgba(0, 212, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .image-analysis {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border-left: 3px solid var(--neon-blue);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, var(--neon-blue), #0EA5E9);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.ai .message-bubble {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: white;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 1rem;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input-container input {
+            flex: 1;
+        }
+
+        /* Crypto Styles */
+        .crypto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .crypto-card {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .crypto-card:hover {
+            border-color: var(--neon-blue);
+            transform: translateY(-3px);
+        }
+
+        .crypto-symbol {
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--neon-blue);
+            margin-bottom: 0.3rem;
+        }
+
+        .crypto-price {
+            font-size: 1.2rem;
+            margin: 0.3rem 0;
+        }
+
+        .crypto-change {
+            font-size: 0.85rem;
+        }
+
+        .positive { color: #10B981; }
+        .negative { color: #EF4444; }
+
+        /* Skill Categories */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
         }
 
         .skill-category {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
             padding: 2rem;
-            border-radius: 15px;
-            color: white;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
         }
 
         .skill-category h3 {
+            font-size: 1.2rem;
             margin-bottom: 1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-category h3 i {
+            color: var(--neon-blue);
             font-size: 1.3rem;
         }
 
@@ -148,458 +832,376 @@
         }
 
         .skill-tag {
-            background: rgba(255,255,255,0.2);
-            padding: 0.3rem 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 0.9rem;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
         }
 
-        .experience-item {
-            border-left: 4px solid #667eea;
-            padding-left: 2rem;
-            margin-bottom: 3rem;
-            position: relative;
+        .skill-tag:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--neon-blue);
         }
 
-        .experience-item::before {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: 0;
-            width: 12px;
-            height: 12px;
-            background: #667eea;
-            border-radius: 50%;
-        }
-
-        .company {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .position {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0.5rem 0;
-        }
-
-        .date {
-            color: #666;
-            font-style: italic;
-        }
-
-        .responsibilities {
-            margin-top: 1rem;
-            list-style: none;
-        }
-
-        .responsibilities li {
-            margin: 0.5rem 0;
-            padding-left: 1rem;
-            position: relative;
-        }
-
-        .responsibilities li::before {
-            content: '▶';
-            position: absolute;
-            left: 0;
-            color: #667eea;
-        }
-
-        .projects-grid {
+        /* Education & Certifications */
+        .education-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
             gap: 2rem;
+            margin-bottom: 3rem;
         }
 
-        .project-card {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        .education-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
             padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .project-demo {
-            background: white;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-            min-height: 200px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .calculator {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            max-width: 250px;
-        }
-
-        .calc-display {
-            grid-column: span 4;
-            padding: 1rem;
-            background: #333;
-            color: white;
-            text-align: right;
-            font-size: 1.2rem;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .calc-btn {
-            padding: 1rem;
-            border: none;
-            border-radius: 5px;
-            background: #667eea;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .calc-btn:hover {
-            background: #5a67d8;
-        }
-
-        .calc-btn.operator {
-            background: #f093fb;
-        }
-
-        .todo-app {
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .todo-input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 2px solid #667eea;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-
-        .todo-list {
-            list-style: none;
-        }
-
-        .todo-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem;
-            background: #f8f9fa;
-            margin: 0.5rem 0;
-            border-radius: 5px;
-        }
-
-        .todo-item.completed {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
-
-        .btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn:hover {
-            background: #5a67d8;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .weather-widget {
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .weather-display {
-            font-size: 2rem;
-            margin: 1rem 0;
-        }
-
-        .chart-container {
-            width: 100%;
-            height: 200px;
-        }
-
-        .crypto-game {
-            width: 100%;
-            text-align: center;
-        }
-
-        .crypto-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-        }
-
-        .crypto-chart {
-            height: 80px;
-            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
-            margin: 1rem 0;
-            border-radius: 5px;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .crypto-chart::after {
+        .education-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.3) 50%, transparent 55%);
-            animation: shimmer 2s infinite;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .education-card:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+            transform: translateY(-5px);
         }
 
-        .crypto-controls {
+        .education-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .education-icon {
+            flex-shrink: 0;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 16px;
             display: flex;
-            gap: 0.5rem;
+            align-items: center;
             justify-content: center;
-            margin: 1rem 0;
+            font-size: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
         }
 
-        .ai-generator {
-            width: 100%;
+        .education-content {
+            flex: 1;
         }
 
-        .ai-input {
-            width: 100%;
-            height: 60px;
-            padding: 0.5rem;
-            border: 2px solid #667eea;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            resize: vertical;
+        .degree {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--neon-blue), white);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .ai-output {
-            background: #1a1a1a;
-            color: #00ff00;
-            padding: 1rem;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            min-height: 100px;
-            white-space: pre-wrap;
-            overflow-y: auto;
+        .specialization {
+            font-size: 1rem;
+            color: var(--neon-purple);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .neural-network {
-            width: 100%;
-            height: 180px;
-            background: radial-gradient(circle, #667eea 1px, transparent 1px);
-            background-size: 20px 20px;
+        .institution {
+            color: var(--light-gray);
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .education-date {
+            color: var(--gray);
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .certifications-section, .languages-section {
+            margin-top: 3rem;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .cert-badge {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .cert-badge:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .cert-badge i {
+            font-size: 2rem;
+            color: var(--neon-blue);
+            flex-shrink: 0;
+        }
+
+        .cert-badge strong {
+            display: block;
+            color: white;
+            margin-bottom: 0.3rem;
+            font-size: 1.05rem;
+        }
+
+        .cert-badge p {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .language-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .language-badge {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .language-badge:hover {
+            border-color: var(--neon-purple);
+            box-shadow: 0 10px 30px rgba(229, 0, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .language-badge .flag {
+            font-size: 3rem;
+        }
+
+        .language-badge .lang-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .language-badge .proficiency {
+            font-size: 0.85rem;
+            color: var(--neon-purple);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .education-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .language-badges {
+                gap: 1rem;
+            }
+
+            .language-badge {
+                min-width: 120px;
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        /* Experience Timeline */
+        .experience-item {
+            border-left: 3px solid var(--neon-blue);
+            padding-left: 2rem;
+            margin-bottom: 3rem;
             position: relative;
-            border-radius: 10px;
-            overflow: hidden;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
         }
 
-        .neuron {
+        .experience-item:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+        }
+
+        .experience-item::before {
+            content: '';
             position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #ff6b6b;
+            left: -9px;
+            top: 30px;
+            width: 14px;
+            height: 14px;
+            background: var(--neon-blue);
             border-radius: 50%;
+            box-shadow: 0 0 20px var(--neon-blue);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.5); opacity: 1; }
+            0%, 100% {
+                box-shadow: 0 0 20px var(--neon-blue);
+            }
+            50% {
+                box-shadow: 0 0 30px var(--neon-blue), 0 0 40px var(--neon-blue);
+            }
         }
 
-        .blockchain-chain {
+        .company {
+            font-size: 1.4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.3rem;
+        }
+
+        .position {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0.3rem 0;
+            color: white;
+        }
+
+        .date {
+            color: var(--light-gray);
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .responsibilities {
+            color: var(--light-gray);
+            line-height: 1.8;
+            list-style: none;
+        }
+
+        .responsibilities li {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .responsibilities li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--neon-blue);
+        }
+
+        /* Floating Action Buttons (QR Code & Share) */
+        .floating-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
             display: flex;
-            gap: 0.5rem;
-            overflow-x: auto;
-            padding: 1rem 0;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .block {
-            min-width: 80px;
+        .floating-btn {
+            width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 5px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 0.8rem;
-            position: relative;
+            animation: pulse-glow 2s infinite;
         }
 
-        .block::after {
-            content: '→';
-            position: absolute;
-            right: -15px;
-            color: #667eea;
-            font-size: 1.2rem;
+        .floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.6);
         }
 
-        .block:last-child::after {
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+            }
+            50% {
+                box-shadow: 0 10px 40px rgba(0, 212, 255, 0.7), 0 0 20px rgba(229, 0, 255, 0.5);
+            }
+        }
+
+        /* QR Code Modal */
+        .qr-modal {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
         }
 
-        .analytics-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            height: 160px;
+        .qr-modal.active {
+            display: flex;
         }
 
-        .metric-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 1rem;
-            border-radius: 8px;
+        .qr-modal-content {
+            background: var(--dark);
+            border: 2px solid var(--neon-blue);
+            border-radius: 24px;
+            padding: 3rem;
             text-align: center;
-        }
-
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-        }
-
-        .quantum-maze {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 2px;
-            height: 150px;
-        }
-
-        .maze-cell {
-            background: #f0f0f0;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: all 0.3s;
+            max-width: 500px;
+            animation: modalSlideIn 0.3s ease;
             position: relative;
         }
 
-        .maze-cell.wall {
-            background: #333;
-        }
-
-        .maze-cell.player {
-            background: #ff6b6b;
-        }
-
-        .maze-cell.goal {
-            background: #4ecdc4;
-        }
-
-        .maze-cell.quantum {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            animation: quantum-flicker 1s infinite;
-        }
-
-        @keyframes quantum-flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .security-scanner {
-            width: 100%;
-        }
-
-        .scan-progress {
-            width: 100%;
-            height: 20px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 1rem 0;
-        }
-
-        .scan-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #ffa500, #4ecdc4);
-            transition: width 0.3s;
-            border-radius: 10px;
-        }
-
-        .vulnerability-list {
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .vuln-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.2rem 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .severity-high { color: #ff6b6b; }
-        .severity-medium { color: #ffa500; }
-        .severity-low { color: #4ecdc4; }
-
-        .contract-builder {
-            width: 100%;
-        }
-
-        .contract-components {
-            display: flex;
-            gap: 0.5rem;
-            margin: 1rem 0;
-            flex-wrap: wrap;
-        }
-
-        .component-block {
-            padding: 0.5rem;
-            background: #667eea;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: transform 0.2s;
-        }
-
-        .component-block:hover {
-            transform: scale(1.05);
-        }
-
-        .contract-output {
-            background: #1a1a1a;
-            color: #00ff00;
-            padding: 0.5rem;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.8rem;
-            height: 80px;
-            overflow-y: auto;
-        }
-
-        @keyframes fadeInUp {
+        @keyframes modalSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(-50px);
             }
             to {
                 opacity: 1;
@@ -607,1166 +1209,2472 @@
             }
         }
 
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
+        .qr-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        .qr-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .qr-modal h2 {
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #qrcode {
+            display: inline-block;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            margin: 1.5rem 0;
+        }
+
+        .qr-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .qr-btn {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--neon-blue);
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--neon-blue);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .qr-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Share Modal */
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .share-modal.active {
+            display: flex;
+        }
+
+        .share-modal-content {
+            background: var(--dark);
+            border: 2px solid var(--neon-purple);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 500px;
+            animation: modalSlideIn 0.3s ease;
+            position: relative;
+        }
+
+        .share-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .share-btn {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            background: var(--glass);
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .share-btn i {
+            font-size: 1.5rem;
+        }
+
+        .share-btn:hover {
+            border-color: var(--neon-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(229, 0, 255, 0.3);
+        }
+
+        .share-btn.whatsapp:hover { border-color: #25D366; color: #25D366; }
+        .share-btn.linkedin:hover { border-color: #0A66C2; color: #0A66C2; }
+        .share-btn.email:hover { border-color: #EA4335; color: #EA4335; }
+        .share-btn.copy:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+
+        /* Visitor Counter Badge */
+        .visitor-badge {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--neon-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--neon-blue);
+            z-index: 998;
+            animation: slideInRight 0.5s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
             }
-            
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Business Card Modal */
+        .business-card-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .business-card-content {
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            border: 2px solid var(--neon-blue);
+            border-radius: 30px;
+            padding: 3rem;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.3);
+        }
+
+        .business-card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .business-card-header h2 {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .contact-card:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .contact-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .contact-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .contact-card p {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .qr-codes-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .qr-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .qr-card h4 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .qr-card-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .qr-mini-btn {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .qr-mini-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
             .nav-links {
                 display: none;
             }
-            
-            .section {
-                padding: 2rem;
-                margin: 50px 0;
+
+            .mobile-menu-btn {
+                display: flex;
             }
-            
-            .contact-info {
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-contact {
                 flex-direction: column;
                 align-items: center;
             }
-        }
-        .btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border: none;
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
 
-  .btn:hover {
-    transform: scale(1.05);
-    background: linear-gradient(135deg, #5a67d8, #6b46c1);
-  }
+            .section {
+                padding: 60px 1rem;
+            }
+
+            .crypto-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Symptom Checker Styles */
+        .symptom-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .symptom-tag {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .symptom-tag.active {
+            background: linear-gradient(135deg, var(--neon-blue), #0EA5E9);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .symptom-tag:hover {
+            border-color: var(--neon-blue);
+        }
+
+        .analysis-result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--neon-purple);
+            margin-top: 1rem;
+        }
+
+        .disclaimer {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #FCA5A5;
+            font-size: 0.9rem;
+        }
+
+        /* Recipe Styles */
+        .ingredient-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .ingredient-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .ingredient-tag {
+            background: rgba(0, 212, 255, 0.2);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .ingredient-tag .remove {
+            cursor: pointer;
+            color: #EF4444;
+            font-weight: bold;
+        }
+
+        .dietary-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-chip {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        .filter-chip.active {
+            background: linear-gradient(135deg, var(--primary-orange), #D97706);
+            border-color: var(--primary-orange);
+        }
+
+        .recipe-result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .recipe-result h4 {
+            color: var(--neon-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Sports Dashboard */
+        .sport-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sport-tab {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+
+        .sport-tab.active {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-color: var(--neon-blue);
+        }
+
+        .match-card {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .match-teams {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            flex: 1;
+        }
+
+        .match-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .live-indicator {
+            width: 8px;
+            height: 8px;
+            background: #EF4444;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Document Analyzer */
+        .upload-zone {
+            border: 2px dashed rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-zone:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .upload-zone i {
+            font-size: 3rem;
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        .document-preview {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .analysis-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .analysis-section h4 {
+            color: var(--neon-blue);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        footer p {
+            color: var(--light-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+        }
     </style>
 </head>
 <body>
-    <nav class="nav">
-        <div class="nav-content">
-            <div class="logo">Abdullah Ali</div>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">ABDULLAH ALI</div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#experience">Experience</a></li>
                 <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#experience">Experience</a></li>
             </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
-    <div class="container">
-        <section id="home" class="hero">
-            <h1>Abdullah Ali</h1>
-            <p>Seasoned Software Engineer & AI Specialist</p>
-            <div class="contact-info">
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="grid-background"></div>
+        <div class="particles-container" id="particlesContainer"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">AI Engineer • Security Specialist • Full Stack Developer</div>
+            <h1 class="hero-title">Abdullah Ali</h1>
+            <p class="hero-subtitle">Building intelligent, secure, and scalable solutions with cutting-edge AI, cybersecurity expertise, and enterprise-grade development. Founder of RIVENTRA, delivering AI-powered solutions with security-first design.</p>
+
+            <div class="hero-contact">
                 <div class="contact-item">
-                    <span>📍</span>
+                    <i class="fas fa-map-marker-alt"></i>
                     <span>Ontario, Canada</span>
                 </div>
                 <div class="contact-item">
-                    <span>📞</span>
+                    <i class="fas fa-phone"></i>
                     <span>(519) 981-8202</span>
                 </div>
                 <div class="contact-item">
-                    <span>✉️</span>
+                    <i class="fas fa-envelope"></i>
                     <span>abdullah20109@yahoo.fr</span>
                 </div>
-                <div class="contact-item">
-                    <span>🔗</span>
-                    <a href="https://github.com/ali-abdullah" style="color: white;">GitHub</a>
-                </div>
             </div>
-        </section>
 
-        <section id="about" class="section">
-            <h2 style="margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">About Me</h2>
-            <p style="font-size: 1.1rem; line-height: 1.8;">
-                Seasoned Software Engineer with a solid background in designing, coding, testing and debugging software applications. 
-                Proven strengths include strong problem-solving abilities, effective teamwork skills, and adherence to software development best practices. 
-                Prior roles have demonstrated the ability to increase efficiency by developing innovative solutions and implementing continuous improvement processes.
-            </p>
-            <div style="margin-top: 2rem;">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">Education</h3>
-                <div style="margin-bottom: 1rem;">
-                    <strong>Master of Science, Computer Science (Spec. Cyber Security)</strong><br>
-                    University of Sunderland － Sunderland, U.K (May 2024)
-                </div>
-                <div>
-                    <strong>Ontario Diploma, Internet Application and Web Development</strong><br>
-                    St-Clair College － Windsor, Ontario (May 2022)
-                </div>
-            </div>
-            <div style="margin-top: 2rem;">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">Certifications</h3>
-                <ul style="list-style: none;">
-                    <li>• Certified in Cybersecurity (CC), ISC² Member</li>
-                    <li>• Information Security Management Post Graduate Certificate (ISM)</li>
-                </ul>
-            </div>
-        </section>
+            <a href="#projects" class="btn-primary">View My Work</a>
+        </div>
+    </section>
 
-        <section id="skills" class="section">
-            <h2 style="margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">Technical Skills</h2>
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2>Advanced Projects</h2>
+                <p>Cutting-edge applications showcasing AI, real-time data processing, security analysis, and enterprise solutions</p>
+            </div>
+
+            <div class="projects-grid">
+                <!-- Project 1: AI Chatbot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-comments"></i></div>
+                        <div>
+                            <h3 class="project-title">AI Personal Assistant</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">Intelligent conversational AI with memory. Remembers your conversation context for natural, flowing dialogue. Voice input supported for hands-free interaction.</p>
+
+                    <div class="project-demo">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="color: var(--light-gray); font-size: 0.85rem;">💬 Conversation Memory Active</span>
+                            <button onclick="clearChat()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #EF4444; padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;">
+                                <i class="fas fa-trash-alt"></i> Clear Chat
+                            </button>
+                        </div>
+                        <div class="chat-container" id="chatContainer">
+                            <div class="message ai">
+                                <div class="message-bubble">Hello! I'm your AI assistant with voice input and conversation memory. Ask me anything about coding, technology, or let me help you brainstorm ideas!</div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceInput()" title="Voice Input">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <input type="text" id="chatInput" placeholder="Type or speak your message..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+                            <button class="btn" onclick="sendChatMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">Conversation Memory</span>
+                        <span class="tag">Voice Input</span>
+                        <span class="tag">Context-Aware</span>
+                        <span class="tag">Real-time Chat</span>
+                    </div>
+                </div>
+
+                <!-- Project 2: Crypto Dashboard -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fab fa-bitcoin"></i></div>
+                        <div>
+                            <h3 class="project-title">Real-time Crypto Dashboard</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">Live cryptocurrency price tracker with real-time updates, interactive charts, and market analysis for major digital assets.</p>
+
+                    <div class="project-demo">
+                        <div class="crypto-grid" id="cryptoGrid"></div>
+                        <canvas id="cryptoChart" width="400" height="180"></canvas>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">CoinGecko API</span>
+                        <span class="tag">Chart.js</span>
+                        <span class="tag">Real-time Data</span>
+                        <span class="tag">Financial</span>
+                    </div>
+                </div>
+
+                <!-- Project 3: Medical Symptom Checker -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-heartbeat"></i></div>
+                        <div>
+                            <h3 class="project-title">AI Medical Symptom Checker</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">AI-powered preliminary health assessment tool. Analyzes symptoms and provides possible conditions with recommendations.</p>
+
+                    <div class="project-demo">
+                        <div class="symptom-tags" id="symptomTags"></div>
+                        <select id="severitySelect" style="margin-bottom: 1rem;">
+                            <option value="">Select Severity</option>
+                            <option value="mild">Mild</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="severe">Severe</option>
+                        </select>
+                        <button class="btn" onclick="analyzeSymptoms()">
+                            <i class="fas fa-stethoscope"></i> Analyze Symptoms
+                        </button>
+                        <div id="symptomAnalysis"></div>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">Healthcare AI</span>
+                        <span class="tag">DeepSeek</span>
+                        <span class="tag">Medical</span>
+                        <span class="tag">Diagnostic</span>
+                    </div>
+                </div>
+
+                <!-- Project 4: Recipe Generator -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-utensils"></i></div>
+                        <div>
+                            <h3 class="project-title">Smart Recipe Generator</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">AI chef that creates personalized recipes based on available ingredients, dietary restrictions, and cuisine preferences.</p>
+
+                    <div class="project-demo">
+                        <button class="image-upload-btn" onclick="document.getElementById('foodImage').click()" style="width: 100%; margin-bottom: 0.5rem;">
+                            <i class="fas fa-camera"></i> Take/Upload Photo of Ingredients
+                        </button>
+                        <input type="file" id="foodImage" style="display: none;" accept="image/*" onchange="handleFoodImage(event)">
+                        <div id="foodImagePreview"></div>
+                        <div class="ingredient-input">
+                            <input type="text" id="ingredientInput" placeholder="Or type ingredient and press Enter" onkeypress="if(event.key==='Enter') addIngredient()">
+                        </div>
+                        <div class="ingredient-tags" id="ingredientTags"></div>
+                        <div class="dietary-filters">
+                            <div class="filter-chip" onclick="toggleFilter(this)">Vegetarian</div>
+                            <div class="filter-chip" onclick="toggleFilter(this)">Vegan</div>
+                            <div class="filter-chip" onclick="toggleFilter(this)">Gluten-Free</div>
+                            <div class="filter-chip" onclick="toggleFilter(this)">Keto</div>
+                        </div>
+                        <button class="btn" onclick="generateRecipe()">
+                            <i class="fas fa-magic"></i> Generate Recipe
+                        </button>
+                        <div id="recipeResult"></div>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">Food Vision AI</span>
+                        <span class="tag">Image Recognition</span>
+                        <span class="tag">Recipe Generation</span>
+                        <span class="tag">Smart Kitchen</span>
+                    </div>
+                </div>
+
+                <!-- Project 5: Sports Dashboard -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-trophy"></i></div>
+                        <div>
+                            <h3 class="project-title">Live Sports Score Dashboard</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">Real-time sports scores and statistics for soccer and basketball. Stay updated with live matches and results.</p>
+
+                    <div class="project-demo">
+                        <div class="sport-tabs">
+                            <div class="sport-tab active" onclick="switchSport(this, 'soccer')">⚽ Soccer</div>
+                            <div class="sport-tab" onclick="switchSport(this, 'basketball')">🏀 Basketball</div>
+                        </div>
+                        <div id="matchesContainer"></div>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">Sports API</span>
+                        <span class="tag">Real-time</span>
+                        <span class="tag">Live Scores</span>
+                        <span class="tag">Multi-sport</span>
+                    </div>
+                </div>
+
+                <!-- Project 6: Business Plan Generator -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-briefcase"></i></div>
+                        <div>
+                            <h3 class="project-title">AI Business Plan Generator</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">Comprehensive business plan creation tool. Input your idea and get a detailed plan with market analysis, strategy, and projections.</p>
+
+                    <div class="project-demo">
+                        <textarea id="businessIdea" placeholder="Describe your business idea..." style="margin-bottom: 0.5rem;"></textarea>
+                        <select id="industrySelect" style="margin-bottom: 1rem;">
+                            <option value="">Select Industry</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Retail">Retail</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Food & Beverage">Food & Beverage</option>
+                            <option value="Education">Education</option>
+                            <option value="Finance">Finance</option>
+                        </select>
+                        <button class="btn" onclick="generateBusinessPlan()">
+                            <i class="fas fa-rocket"></i> Generate Business Plan
+                        </button>
+                        <div id="businessPlanResult"></div>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">Entrepreneurship</span>
+                        <span class="tag">Business Strategy</span>
+                        <span class="tag">AI Planning</span>
+                        <span class="tag">Market Analysis</span>
+                    </div>
+                </div>
+
+                <!-- Project 7: Document Analyzer -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-file-alt"></i></div>
+                        <div>
+                            <h3 class="project-title">Document Scanner & AI Analyzer</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">Upload documents for AI-powered analysis. Get summaries, extract key points, identify important information, and ask questions.</p>
+
+                    <div class="project-demo">
+                        <div class="upload-zone" onclick="document.getElementById('docUpload').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Upload image/document or paste text below</p>
+                            <p style="font-size: 0.85rem; color: var(--light-gray); margin-top: 0.5rem;">Supports: Images, PDF, Text files</p>
+                        </div>
+                        <input type="file" id="docUpload" style="display: none;" accept=".txt,.pdf,image/*" onchange="handleFileUpload(event)">
+                        <div id="docImagePreview"></div>
+                        <textarea id="docText" placeholder="Or paste document text here..." style="margin-top: 1rem; min-height: 80px;"></textarea>
+                        <button class="btn" onclick="analyzeDocument()" style="margin-top: 0.5rem;">
+                            <i class="fas fa-search"></i> Analyze Document
+                        </button>
+                        <div id="docAnalysis"></div>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">Image Recognition</span>
+                        <span class="tag">OCR</span>
+                        <span class="tag">Vision AI</span>
+                        <span class="tag">Document Analysis</span>
+                    </div>
+                </div>
+
+                <!-- Project 8: Homework Helper -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div>
+                            <h3 class="project-title">AI Homework Helper</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">Educational AI tutor providing step-by-step explanations, concept breakdowns, and learning assistance across multiple subjects.</p>
+
+                    <div class="project-demo">
+                        <select id="subjectSelect" style="margin-bottom: 0.5rem;">
+                            <option value="">Select Subject</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Science">Science</option>
+                            <option value="Programming">Programming</option>
+                            <option value="English">English</option>
+                            <option value="History">History</option>
+                        </select>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <button class="image-upload-btn" onclick="document.getElementById('homeworkImage').click()" style="flex: 1;">
+                                <i class="fas fa-camera"></i> Upload Problem Photo
+                            </button>
+                        </div>
+                        <input type="file" id="homeworkImage" style="display: none;" accept="image/*" onchange="handleHomeworkImage(event)">
+                        <div id="homeworkImagePreview"></div>
+                        <textarea id="homeworkQuestion" placeholder="Enter your question or problem (or upload a photo)..." style="margin-bottom: 1rem; min-height: 80px;"></textarea>
+                        <button class="btn" onclick="solveHomework()">
+                            <i class="fas fa-brain"></i> Get Help
+                        </button>
+                        <div id="homeworkSolution"></div>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">Photo Recognition</span>
+                        <span class="tag">AI Tutor</span>
+                        <span class="tag">Visual Learning</span>
+                        <span class="tag">OCR</span>
+                    </div>
+                </div>
+
+                <!-- Project 9: Travel Planner -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-plane"></i></div>
+                        <div>
+                            <h3 class="project-title">Travel Itinerary Planner</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">AI-powered travel planning assistant. Creates personalized day-by-day itineraries with activities, dining, and budget estimates.</p>
+
+                    <div class="project-demo">
+                        <input type="text" id="destination" placeholder="Destination" style="margin-bottom: 0.5rem;">
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <input type="number" id="tripDuration" placeholder="Days" min="1" max="14" style="flex: 1;">
+                            <select id="budgetLevel" style="flex: 1;">
+                                <option value="">Budget Level</option>
+                                <option value="Budget">Budget</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Luxury">Luxury</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="planTravel()">
+                            <i class="fas fa-map-marked-alt"></i> Plan Trip
+                        </button>
+                        <div id="travelPlan"></div>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">Travel Tech</span>
+                        <span class="tag">AI Planning</span>
+                        <span class="tag">Itinerary</span>
+                        <span class="tag">Tourism</span>
+                    </div>
+                </div>
+
+                <!-- Project 10: Financial Advisor -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon"><i class="fas fa-chart-pie"></i></div>
+                        <div>
+                            <h3 class="project-title">Financial Advisor Bot</h3>
+                        </div>
+                    </div>
+                    <p class="project-description">Intelligent financial planning assistant. Analyzes income, expenses, and goals to provide personalized budget recommendations and investment strategies.</p>
+
+                    <div class="project-demo">
+                        <input type="number" id="monthlyIncome" placeholder="Monthly Income ($)" style="margin-bottom: 0.5rem;">
+                        <input type="number" id="monthlyExpenses" placeholder="Monthly Expenses ($)" style="margin-bottom: 0.5rem;">
+                        <select id="financialGoal" style="margin-bottom: 1rem;">
+                            <option value="">Select Financial Goal</option>
+                            <option value="Emergency Fund">Build Emergency Fund</option>
+                            <option value="Debt Payoff">Pay Off Debt</option>
+                            <option value="Savings">Increase Savings</option>
+                            <option value="Investment">Start Investing</option>
+                            <option value="Retirement">Retirement Planning</option>
+                        </select>
+                        <button class="btn" onclick="getFinancialAdvice()">
+                            <i class="fas fa-dollar-sign"></i> Get Financial Advice
+                        </button>
+                        <div id="financialAdvice"></div>
+                    </div>
+
+                    <div class="project-tags">
+                        <span class="tag">FinTech</span>
+                        <span class="tag">Budget Analysis</span>
+                        <span class="tag">AI Advisor</span>
+                        <span class="tag">Investment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2>Technical Expertise</h2>
+                <p>Comprehensive skill set spanning AI, security, and full-stack development with enterprise-grade expertise</p>
+            </div>
+
             <div class="skills-grid">
                 <div class="skill-category">
-                    <h3>Programming Languages</h3>
+                    <h3><i class="fas fa-robot"></i> AI & Machine Learning</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">PyTorch</span>
+                        <span class="skill-tag">DeepSeek</span>
+                        <span class="skill-tag">Prompt Engineering</span>
+                        <span class="skill-tag">NLP</span>
+                        <span class="skill-tag">Computer Vision</span>
+                        <span class="skill-tag">LLMs</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-shield-alt"></i> Cybersecurity</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Penetration Testing</span>
+                        <span class="skill-tag">SIEM</span>
+                        <span class="skill-tag">ISC² Certified</span>
+                        <span class="skill-tag">Vulnerability Assessment</span>
+                        <span class="skill-tag">Compliance</span>
+                        <span class="skill-tag">Security Audits</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-code"></i> Programming</h3>
                     <div class="skill-list">
                         <span class="skill-tag">Python</span>
                         <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">TypeScript</span>
                         <span class="skill-tag">C#</span>
                         <span class="skill-tag">Java</span>
                         <span class="skill-tag">PHP</span>
+                        <span class="skill-tag">SQL</span>
                     </div>
                 </div>
+
                 <div class="skill-category">
-                    <h3>Frameworks & Libraries</h3>
+                    <h3><i class="fas fa-layer-group"></i> Frameworks</h3>
                     <div class="skill-list">
                         <span class="skill-tag">React</span>
-                        <span class="skill-tag">.NET</span>
                         <span class="skill-tag">Node.js</span>
-                        <span class="skill-tag">Express.js</span>
-                        <span class="skill-tag">AngularJS</span>
-                        <span class="skill-tag">Redux.js</span>
+                        <span class="skill-tag">.NET</span>
+                        <span class="skill-tag">Express</span>
+                        <span class="skill-tag">Redux</span>
+                        <span class="skill-tag">Angular</span>
                         <span class="skill-tag">Blazor</span>
                     </div>
                 </div>
+
                 <div class="skill-category">
-                    <h3>AI & Machine Learning</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">TensorFlow</span>
-                        <span class="skill-tag">Prompt Engineering</span>
-                        <span class="skill-tag">Azure AI Services</span>
-                        <span class="skill-tag">NLP</span>
-                        <span class="skill-tag">Computer Vision</span>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>Cloud & Database</h3>
+                    <h3><i class="fas fa-cloud"></i> Cloud & DevOps</h3>
                     <div class="skill-list">
                         <span class="skill-tag">Azure</span>
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Kubernetes</span>
+                        <span class="skill-tag">CI/CD</span>
+                        <span class="skill-tag">Terraform</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-database"></i> Databases</h3>
+                    <div class="skill-list">
                         <span class="skill-tag">MongoDB</span>
-                        <span class="skill-tag">Cloud Architecture</span>
-                        <span class="skill-tag">Data Migration</span>
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">Redis</span>
+                        <span class="skill-tag">Firebase</span>
+                        <span class="skill-tag">Elasticsearch</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="experience" class="section">
-  <h2 style="margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">Work Experience</h2>
+    <!-- Education & Certifications Section -->
+    <section class="section" id="education">
+        <div class="container">
+            <div class="section-header">
+                <h2>Education & Certifications</h2>
+                <p>Advanced degrees and professional certifications in Computer Science, Cybersecurity, and Web Development</p>
+            </div>
 
-  
-
-  <div class="experience-item">
-    <div class="company">Scale AI</div>
-    <div class="position">AI Software Engineer</div>
-    <div class="date">Feb 2024 to Oct 2024</div>
-    <ul class="responsibilities">
-      <li>Developed and optimized ML models for computer vision, NLP, and multi-modal AI tasks, increasing model accuracy by 20%</li>
-      <li>Fine-tuned LLMs and advanced prompt systems to improve AI performance</li>
-      <li>Integrated scalable AI algorithms using Python and TensorFlow</li>
-    </ul>
-  </div>
-
-  <div class="experience-item">
-    <div class="company">Shaheen E-Commerce</div>
-    <div class="position">Full Stack Developer</div>
-    <div class="date">Jan 2023 to Aug 2023 – Remote</div>
-    <ul class="responsibilities">
-      <li>Led the development of a multi-vendor e-commerce platform serving 50+ vendors</li>
-      <li>Integrated Stripe and PayPal payment gateways, reducing transaction errors by 25%</li>
-      <li>Built a responsive admin dashboard with real-time analytics, improving sales tracking accuracy by 40%</li>
-    </ul>
-  </div>
-
-  <div class="experience-item">
-    <div class="company">Eco-Environmental</div>
-    <div class="position">Full Stack Software Engineer</div>
-    <div class="date">May 2022 to Sep 2023</div>
-    <ul class="responsibilities">
-      <li>Built an environmental compliance tracking system using the MERN stack, improving accuracy by 20%</li>
-      <li>Developed real-time data visualization dashboards for decision-making</li>
-      <li>Designed RESTful APIs for sensor integration, ensuring data interoperability</li>
-    </ul>
-  </div>
-  <div class="experience-item">
-    <div class="company">Wolters Kluwer</div>
-    <div class="position">Bilingual Senior Technical Engineer</div>
-    <div class="date">Jan 2023 to Present</div>
-    <ul class="responsibilities">
-      <li>Delivered bilingual technical support, troubleshooting software issues and ensuring adherence to security protocols, achieving a customer satisfaction rate of 95%</li>
-      <li>Implemented ML-based automation solutions to streamline support processes, reducing resolution time by 40%</li>
-      <li>Utilized NLP technologies to enhance documentation and knowledge base systems, improving information retrieval accuracy by 40%</li>
-    </ul>
-  </div>
-
-  <div class="experience-item">
-    <div class="company">Apple</div>
-    <div class="position">Bilingual Technical Support</div>
-    <div class="date">Jan 2023 to Jul 2023</div>
-    <ul class="responsibilities">
-      <li>Provided bilingual technical support and software troubleshooting, maintaining a 95% customer satisfaction rate</li>
-      <li>Streamlined support operations with ML-based automation, improving efficiency by 40%</li>
-      <li>Improved documentation with NLP-powered enhancements, boosting information accuracy</li>
-    </ul>
-  </div>
-
-  <div class="experience-item">
-    <div class="company">AUL Fleet</div>
-    <div class="position">Full Stack Software Engineer</div>
-    <div class="date">May 2021 to May 2022</div>
-    <ul class="responsibilities">
-      <li>Developed a fleet management solution for 200+ vehicles with real-time location tracking</li>
-      <li>Built a mobile-responsive app in React Native with a 4.7/5 user rating</li>
-      <li>Created RESTful APIs for seamless mobile and web integration</li>
-    </ul>
-  </div>
-
-  <div class="experience-item">
-    <div class="company">Naqlista</div>
-    <div class="position">Security Analyst</div>
-    <div class="date">Jan 2021 to Dec 2021</div>
-    <ul class="responsibilities">
-      <li>Conducted vulnerability assessments and penetration testing to identify security risks</li>
-      <li>Implemented AI-based security monitoring using SIEM systems</li>
-      <li>Assisted in drafting and implementing security policies</li>
-      <li>Monitored logs with ML-based anomaly detection</li>
-    </ul>
-  </div>
-</section>
-
-        <section id="projects" class="section">
-            <h2 style="margin-bottom: 2rem; font-size: 2.5rem; color: #667eea;">Innovative Interactive Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3>🚀 Crypto Trading Simulator</h3>
-                    <p>Real-time cryptocurrency trading game with portfolio tracking and market analysis.</p>
-                    <div id="crypto-game" class="project-demo"></div>
+            <div class="education-grid">
+                <!-- Education Card 1 -->
+                <div class="education-card">
+                    <div class="education-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="education-content">
+                        <h3 class="degree">Master of Science in Computer Science</h3>
+                        <p class="specialization">Cybersecurity Specialization</p>
+                        <p class="institution">University of Sunderland, United Kingdom</p>
+                        <p class="education-date">Graduated: 2024</p>
+                    </div>
                 </div>
-                
-                <div class="project-card">
-                    <h3>🤖 AI Code Generator</h3>
-                    <p>Interactive AI assistant that generates code snippets based on natural language descriptions.</p>
-                    <div id="ai-generator" class="project-demo"></div>
-                </div>
-                
-                <div class="project-card">
-                    <h3>🌐 Currency Converter</h3>
-                    <p>Interactive 3D visualization of neural network architecture with animated data flow.</p>
-                    <div id="neural-viz" class="project-demo"></div>
-                </div>
-                
-                <div class="project-card">
-                    <h3>🔐 Invoice PDF</h3>
-                    <p>Mini project involving creating an invoice and download it as PDF</p>
-                    <div id="blockchain-demo" class="project-demo"></div>
-                </div>
-                
-                <div class="project-card">
-                    <h3>📊 Weather Dashboard</h3>
-                    <p>Live data streaming dashboard with multiple chart types and filtering capabilities.</p>
-                    <div id="analytics-dashboard" class="project-demo"></div>
-                </div>
-                
-          
-                
-                <div class="project-card">
-                    <h3>🔍 Cybersecurity Scanner</h3>
-                    <p>Interactive security assessment tool with vulnerability detection simulation.</p>
-                    <div id="security-scanner" class="project-demo"></div>
+
+                <!-- Education Card 2 -->
+                <div class="education-card">
+                    <div class="education-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="education-content">
+                        <h3 class="degree">Ontario College Diploma</h3>
+                        <p class="specialization">Internet Application and Web Development</p>
+                        <p class="institution">St. Clair College, Ontario, Canada</p>
+                        <p class="education-date">Graduated: 2022</p>
+                    </div>
                 </div>
             </div>
-        </section>
+
+            <!-- Certifications -->
+            <div class="certifications-section">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--neon-blue);">
+                    <i class="fas fa-certificate"></i> Professional Certifications
+                </h3>
+                <div class="cert-grid">
+                    <div class="cert-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>Certified in Cybersecurity (CC)</strong>
+                            <p>(ISC)² International Information System Security Certification Consortium</p>
+                        </div>
+                    </div>
+                    <div class="cert-badge">
+                        <i class="fas fa-lock"></i>
+                        <div>
+                            <strong>Information Security Management</strong>
+                            <p>Post Graduate Certificate (ISM)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Languages -->
+            <div class="languages-section">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--neon-purple);">
+                    <i class="fas fa-language"></i> Languages
+                </h3>
+                <div class="language-badges">
+                    <div class="language-badge">
+                        <span class="flag">🇸🇦</span>
+                        <span class="lang-name">Arabic</span>
+                        <span class="proficiency">Native</span>
+                    </div>
+                    <div class="language-badge">
+                        <span class="flag">🇬🇧</span>
+                        <span class="lang-name">English</span>
+                        <span class="proficiency">Native</span>
+                    </div>
+                    <div class="language-badge">
+                        <span class="flag">🇫🇷</span>
+                        <span class="lang-name">French</span>
+                        <span class="proficiency">Native</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="section" id="experience">
+        <div class="container">
+            <div class="section-header">
+                <h2>Professional Experience</h2>
+                <p>Proven track record in AI development, security consulting, and enterprise software engineering</p>
+            </div>
+
+            <div class="experience-item">
+                <div class="company">RIVENTRA</div>
+                <div class="position">Founder & CEO</div>
+                <div class="date">2024 - Present</div>
+                <ul class="responsibilities">
+                    <li>Founded and leading technology consultancy delivering AI-powered solutions with security-first design for Canadian businesses</li>
+                    <li>Providing strategic AI advisory, implementation services, and fractional CTO/CISO expertise</li>
+                    <li>Building custom AI applications, security audits, and cloud architecture solutions</li>
+                    <li>Developing end-to-end solutions from strategy to production deployment with focus on scalability and security</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="company">Wolters Kluwer</div>
+                <div class="position">Bilingual Senior Technical Engineer</div>
+                <div class="date">Jan 2023 - Present</div>
+                <ul class="responsibilities">
+                    <li>Delivered bilingual technical support, achieving 95% customer satisfaction rate</li>
+                    <li>Implemented ML-based automation solutions, reducing resolution time by 40%</li>
+                    <li>Utilized NLP technologies to enhance documentation and knowledge base systems, improving information retrieval accuracy by 40%</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="company">Scale AI</div>
+                <div class="position">AI Software Engineer</div>
+                <div class="date">Feb 2024 - Oct 2024</div>
+                <ul class="responsibilities">
+                    <li>Developed and optimized ML models for computer vision, NLP, and multi-modal AI tasks, increasing model accuracy by 20%</li>
+                    <li>Fine-tuned LLMs and advanced prompt systems to improve AI performance and response quality</li>
+                    <li>Integrated scalable AI algorithms using Python and TensorFlow for production environments</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="company">Shaheen E-Commerce</div>
+                <div class="position">Full Stack Developer</div>
+                <div class="date">Jan 2023 - Aug 2023</div>
+                <ul class="responsibilities">
+                    <li>Led development of multi-vendor e-commerce platform serving 50+ vendors with real-time inventory management</li>
+                    <li>Integrated Stripe and PayPal payment gateways, reducing transaction errors by 25%</li>
+                    <li>Built responsive admin dashboard with real-time analytics, improving sales tracking accuracy by 40%</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="company">Eco-Environmental</div>
+                <div class="position">Full Stack Software Engineer</div>
+                <div class="date">May 2022 - Sep 2023</div>
+                <ul class="responsibilities">
+                    <li>Built environmental compliance tracking system using MERN stack, improving accuracy by 20%</li>
+                    <li>Developed real-time data visualization dashboards for environmental data analysis and decision-making</li>
+                    <li>Designed RESTful APIs for sensor integration, ensuring data interoperability across systems</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="company">AUL Fleet</div>
+                <div class="position">Full Stack Software Engineer</div>
+                <div class="date">May 2021 - May 2022</div>
+                <ul class="responsibilities">
+                    <li>Developed fleet management solution for 200+ vehicles with real-time GPS location tracking</li>
+                    <li>Built mobile-responsive app in React Native with 4.7/5 user rating</li>
+                    <li>Created RESTful APIs for seamless mobile and web integration with vehicle telematics</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="company">Naqlista</div>
+                <div class="position">Security Analyst</div>
+                <div class="date">Jan 2021 - Dec 2021</div>
+                <ul class="responsibilities">
+                    <li>Conducted vulnerability assessments and penetration testing to identify security risks and compliance gaps</li>
+                    <li>Implemented AI-based security monitoring using SIEM systems for threat detection</li>
+                    <li>Monitored logs with ML-based anomaly detection, reducing false positives by 30%</li>
+                    <li>Assisted in drafting and implementing security policies aligned with industry standards</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-actions">
+        <button class="floating-btn" id="businessCardBtn" title="Digital Business Card">
+            <i class="fas fa-id-card"></i>
+        </button>
+        <button class="floating-btn" id="qrBtn" title="Show QR Code">
+            <i class="fas fa-qrcode"></i>
+        </button>
+        <button class="floating-btn" id="shareBtn" title="Share Portfolio">
+            <i class="fas fa-share-alt"></i>
+        </button>
     </div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+    <!-- Visitor Counter Badge -->
+    <div class="visitor-badge">
+        <i class="fas fa-eye"></i> <span id="visitorCount">0</span> views
+    </div>
 
-        // Calculator Component
-        function Calculator() {
-            const [display, setDisplay] = useState('0');
-            const [operation, setOperation] = useState(null);
-            const [previousValue, setPreviousValue] = useState(null);
-            const [waitingForNumber, setWaitingForNumber] = useState(false);
+    <!-- QR Code Modal -->
+    <div class="qr-modal" id="qrModal">
+        <div class="qr-modal-content">
+            <button class="qr-modal-close" onclick="closeQR()">×</button>
+            <h2><i class="fas fa-qrcode"></i> Scan to View Portfolio</h2>
+            <p style="color: var(--light-gray); margin-bottom: 1rem;">Point your camera at the QR code</p>
+            <div id="qrcode"></div>
+            <p style="margin: 1rem 0; color: white; font-weight: 600;">Abdullah Ali</p>
+            <p style="color: var(--light-gray); font-size: 0.9rem;">AI Engineer & Security Specialist</p>
+            <div class="qr-actions">
+                <button class="qr-btn" onclick="downloadQR()"><i class="fas fa-download"></i> Download PNG</button>
+                <button class="qr-btn" onclick="printQR()"><i class="fas fa-print"></i> Print</button>
+            </div>
+        </div>
+    </div>
 
-            const inputNumber = (num) => {
-                if (waitingForNumber) {
-                    setDisplay(String(num));
-                    setWaitingForNumber(false);
-                } else {
-                    setDisplay(display === '0' ? String(num) : display + num);
-                }
-            };
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-modal-content">
+            <button class="qr-modal-close" onclick="closeShare()">×</button>
+            <h2><i class="fas fa-share-alt"></i> Share My Portfolio</h2>
+            <p style="color: var(--light-gray); margin-bottom: 0.5rem;">Let's connect and collaborate!</p>
+            <div class="share-buttons">
+                <button class="share-btn whatsapp" onclick="shareWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+                <button class="share-btn linkedin" onclick="shareLinkedIn()">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </button>
+                <button class="share-btn email" onclick="shareEmail()">
+                    <i class="fas fa-envelope"></i> Email
+                </button>
+                <button class="share-btn copy" onclick="copyLink()">
+                    <i class="fas fa-copy"></i> Copy Link
+                </button>
+            </div>
+        </div>
+    </div>
 
-            const inputOperation = (nextOperation) => {
-                const inputValue = parseFloat(display);
+    <!-- Business Card Modal -->
+    <div class="business-card-modal" id="businessCardModal">
+        <div class="business-card-content">
+            <button class="qr-modal-close" onclick="closeBusinessCard()">×</button>
 
-                if (previousValue === null) {
-                    setPreviousValue(inputValue);
-                } else if (operation) {
-                    const currentValue = previousValue || 0;
-                    const newValue = calculate(currentValue, inputValue, operation);
-                    
-                    setDisplay(String(newValue));
-                    setPreviousValue(newValue);
-                }
-
-                setWaitingForNumber(true);
-                setOperation(nextOperation);
-            };
-
-            const calculate = (firstValue, secondValue, operation) => {
-                switch (operation) {
-                    case '+':
-                        return firstValue + secondValue;
-                    case '-':
-                        return firstValue - secondValue;
-                    case '×':
-                        return firstValue * secondValue;
-                    case '÷':
-                        return firstValue / secondValue;
-                    case '=':
-                        return secondValue;
-                    default:
-                        return secondValue;
-                }
-            };
-
-            const performCalculation = () => {
-                const inputValue = parseFloat(display);
-
-                if (previousValue !== null && operation) {
-                    const newValue = calculate(previousValue, inputValue, operation);
-                    setDisplay(String(newValue));
-                    setPreviousValue(null);
-                    setOperation(null);
-                    setWaitingForNumber(true);
-                }
-            };
-
-            const clear = () => {
-                setDisplay('0');
-                setOperation(null);
-                setPreviousValue(null);
-                setWaitingForNumber(false);
-            };
-
-            return (
-                <div className="calculator">
-                    <div className="calc-display">{display}</div>
-                    <button className="calc-btn" onClick={clear}>C</button>
-                    <button className="calc-btn operator" onClick={() => inputOperation('÷')}>÷</button>
-                    <button className="calc-btn operator" onClick={() => inputOperation('×')}>×</button>
-                    <button className="calc-btn operator" onClick={() => inputOperation('-')}>-</button>
-                    <button className="calc-btn" onClick={() => inputNumber(7)}>7</button>
-                    <button className="calc-btn" onClick={() => inputNumber(8)}>8</button>
-                    <button className="calc-btn" onClick={() => inputNumber(9)}>9</button>
-                    <button className="calc-btn operator" onClick={() => inputOperation('+')}>+</button>
-                    <button className="calc-btn" onClick={() => inputNumber(4)}>4</button>
-                    <button className="calc-btn" onClick={() => inputNumber(5)}>5</button>
-                    <button className="calc-btn" onClick={() => inputNumber(6)}>6</button>
-                    <button className="calc-btn" onClick={() => inputNumber(1)}>1</button>
-                    <button className="calc-btn" onClick={() => inputNumber(2)}>2</button>
-                    <button className="calc-btn" onClick={() => inputNumber(3)}>3</button>
-                    <button className="calc-btn" onClick={() => inputNumber(0)} style={{gridColumn: 'span 2'}}>0</button>
-                    <button className="calc-btn operator" onClick={performCalculation}>=</button>
-                </div>
-            );
-        }
-
-        // Todo App Component
-        function TodoApp() {
-            const [todos, setTodos] = useState([]);
-            const [inputValue, setInputValue] = useState('');
-
-            const addTodo = () => {
-                if (inputValue.trim() !== '') {
-                    setTodos([...todos, { id: Date.now(), text: inputValue, completed: false }]);
-                    setInputValue('');
-                }
-            };
-
-            const toggleTodo = (id) => {
-                setTodos(todos.map(todo => 
-                    todo.id === id ? { ...todo, completed: !todo.completed } : todo
-                ));
-            };
-
-            const deleteTodo = (id) => {
-                setTodos(todos.filter(todo => todo.id !== id));
-            };
-
-            return (
-                <div className="todo-app">
-                    <div style={{display: 'flex', marginBottom: '1rem'}}>
-                        <input
-                            type="text"
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            onKeyPress={(e) => e.key === 'Enter' && addTodo()}
-                            placeholder="Add a task..."
-                            className="todo-input"
-                        />
-                        <button onClick={addTodo} className="btn">Add</button>
-                    </div>
-                    <ul className="todo-list">
-                        {todos.map(todo => (
-                            <li key={todo.id} className={`todo-item ${todo.completed ? 'completed' : ''}`}>
-                                <span onClick={() => toggleTodo(todo.id)} style={{cursor: 'pointer'}}>
-                                    {todo.text}
-                                </span>
-                                <button onClick={() => deleteTodo(todo.id)} className="btn btn-danger">
-                                    Delete
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            );
-        }
-
-        // Weather Widget Component
-        function WeatherWidget() {
-            const [weather, setWeather] = useState({
-                temp: 22,
-                condition: 'Sunny',
-                location: 'Ontario, Canada'
-            });
-
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    const conditions = ['Sunny', 'Cloudy', 'Rainy', 'Snowy', 'Clear'];
-                    const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
-                    const randomTemp = Math.floor(Math.random() * 35) - 10;
-                    
-                    setWeather({
-                        temp: randomTemp,
-                        condition: randomCondition,
-                        location: 'Ontario, Canada'
-                    });
-                }, 3000);
-
-                return () => clearInterval(interval);
-            }, []);
-
-            return (
-                <div className="weather-widget">
-                    <h4>{weather.location}</h4>
-                    <div className="weather-display">
-                        {weather.temp}°C
-                    </div>
-                    <p>{weather.condition}</p>
-                </div>
-            );
-        }
-
-
-         // Crypto Trading Simulator Component
-        function CryptoGame() {
-            const [coins, setCoins] = React.useState([]);
-    const [selected, setSelected] = React.useState(null);
-    const [prices, setPrices] = React.useState({});
-    const [balance, setBalance] = React.useState(5000);
-    const [wallet, setWallet] = React.useState({});
-
-    // Fetch top 10 coins
-    React.useEffect(() => {
-        fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10")
-            .then(res => res.json())
-            .then(data => {
-                setCoins(data);
-                setSelected(data[0]);
-                const priceMap = {};
-                data.forEach(c => { priceMap[c.id] = c.current_price; });
-                setPrices(priceMap);
-            });
-    }, []);
-
-    // Update prices every 5 seconds
-    React.useEffect(() => {
-        const interval = setInterval(() => {
-            fetch("https://api.coingecko.com/api/v3/simple/price?ids=" +
-                coins.map(c => c.id).join(",") +
-                "&vs_currencies=usd")
-                .then(res => res.json())
-                .then(data => {
-                    const updatedPrices = {};
-                    for (let key in data) {
-                        updatedPrices[key] = data[key].usd;
-                    }
-                    setPrices(updatedPrices);
-                });
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [coins]);
-
-    const buy = () => {
-        const price = prices[selected.id];
-        if (balance >= price) {
-            setBalance(b => b - price);
-            setWallet(w => ({ ...w, [selected.id]: (w[selected.id] || 0) + 1 }));
-        }
-    };
-
-    const sell = () => {
-        const price = prices[selected.id];
-        if ((wallet[selected.id] || 0) > 0) {
-            setBalance(b => b + price);
-            setWallet(w => ({ ...w, [selected.id]: w[selected.id] - 1 }));
-        }
-    };
-
-    return (
-        <div style={{ maxWidth: "800px", margin: "0 auto", fontFamily: "sans-serif" }}>
-            <h2 style={{ color: "#4F46E5" }}>💸 Crypto Wallet Simulator</h2>
-
-            <div style={{ marginBottom: "1rem" }}>
-                <label style={{ fontWeight: "bold" }}>Select Coin:</label>
-                <select
-                    style={{ padding: "0.5rem", borderRadius: "8px", border: "1px solid #ccc", marginLeft: "1rem" }}
-                    onChange={e => setSelected(coins.find(c => c.id === e.target.value))}
-                    value={selected?.id}
-                >
-                    {coins.map(coin => (
-                        <option key={coin.id} value={coin.id}>
-                            {coin.name}
-                        </option>
-                    ))}
-                </select>
+            <div class="business-card-header">
+                <h2><i class="fas fa-id-card"></i> Digital Business Card</h2>
+                <p style="color: var(--light-gray);">Connect with me instantly</p>
             </div>
 
-            {selected && (
-                <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    padding: "1rem",
-                    background: "#fff",
-                    borderRadius: "8px",
-                    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-                    marginBottom: "2rem"
-                }}>
-                    <img src={selected.image} alt={selected.name} style={{ width: 32, height: 32, marginRight: 12 }} />
-                    <div>
-                        <strong>{selected.name}</strong> ({selected.symbol.toUpperCase()})<br />
-                        💲Price: ${prices[selected.id]?.toFixed(2) || "Loading..."}
-                    </div>
-                    <div style={{ marginLeft: "auto", display: "flex", gap: "1rem" }}>
-                        <button onClick={buy} style={{ background: "#4F46E5", color: "white", border: "none", padding: "0.5rem 1rem", borderRadius: "6px" }}>
-                            Buy 1
-                        </button>
-                        <button onClick={sell} style={{ background: "#DC2626", color: "white", border: "none", padding: "0.5rem 1rem", borderRadius: "6px" }}>
-                            Sell 1
+            <!-- Direct Contact Options -->
+            <div class="contact-grid">
+                <div class="contact-card" onclick="connectLinkedIn()">
+                    <i class="fab fa-linkedin"></i>
+                    <h3>Connect on LinkedIn</h3>
+                    <p>Professional Network</p>
+                </div>
+
+                <div class="contact-card" onclick="sendWhatsAppDirect()">
+                    <i class="fab fa-whatsapp"></i>
+                    <h3>WhatsApp Me</h3>
+                    <p>Quick Message</p>
+                </div>
+
+                <div class="contact-card" onclick="sendEmailDirect()">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Send Email</h3>
+                    <p>Professional Contact</p>
+                </div>
+
+                <div class="contact-card" onclick="downloadResume()">
+                    <i class="fas fa-file-pdf"></i>
+                    <h3>Download Resume</h3>
+                    <p>PDF Format</p>
+                </div>
+            </div>
+
+            <!-- QR Codes Section -->
+            <div class="qr-codes-section">
+                <div class="qr-card">
+                    <h4><i class="fas fa-globe"></i> Portfolio</h4>
+                    <div id="qrPortfolio"></div>
+                    <div class="qr-card-actions">
+                        <button class="qr-mini-btn" onclick="downloadQRCode('portfolio')">
+                            <i class="fas fa-download"></i>
                         </button>
                     </div>
                 </div>
-            )}
 
-            <h3 style={{ marginBottom: "0.5rem" }}>📊 Wallet Summary</h3>
-            <div style={{ background: "#f9fafb", padding: "1rem", borderRadius: "8px" }}>
-                <p><strong>💰 Balance:</strong> ${balance.toFixed(2)}</p>
-                {Object.keys(wallet).length === 0 ? (
-                    <p>No holdings yet</p>
-                ) : (
-                    Object.entries(wallet).map(([coinId, qty]) => {
-                        const coin = coins.find(c => c.id === coinId);
-                        return (
-                            <div key={coinId} style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
-                                <img src={coin.image} alt={coin.name} style={{ width: 20, height: 20, marginRight: 8 }} />
-                                <div>{coin.name} ({coin.symbol.toUpperCase()}) — {qty} coins</div>
-                            </div>
-                        );
-                    })
-                )}
+                <div class="qr-card">
+                    <h4><i class="fab fa-linkedin"></i> LinkedIn</h4>
+                    <div id="qrLinkedIn"></div>
+                    <div class="qr-card-actions">
+                        <button class="qr-mini-btn" onclick="downloadQRCode('linkedin')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="qr-card">
+                    <h4><i class="fas fa-file-pdf"></i> Resume</h4>
+                    <div id="qrResume"></div>
+                    <div class="qr-card-actions">
+                        <button class="qr-mini-btn" onclick="downloadQRCode('resume')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="qr-mini-btn" onclick="shareResume()">
+                            <i class="fas fa-share"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    );
-}        // AI Code Generator Component
-        function AIGenerator() {
- const [prompt, setPrompt] = useState('');
-  const [output, setOutput] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async () => {
-    if (!prompt.trim()) return;
-    setLoading(true);
-    setOutput('');
-
-    try {
-      const res = await fetch('https://ai-api-m176.vercel.app/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
-      });
-      const data = await res.json();
-      setOutput(data.output || 'No response');
-    } catch (err) {
-      console.error(err);
-      setOutput('Error fetching from DeepSeek API');
-    }
-
-    setLoading(false);
-  };
-
-  return (
-    <div className="p-4 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">DeepSeek Chat</h1>
-      <textarea
-        className="w-full p-2 border rounded"
-        rows={4}
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Ask DeepSeek something..."
-      />
-      <button
-        className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"
-        onClick={handleSubmit}
-        disabled={loading}
-      >
-        {loading ? 'Generating...' : 'Generate'}
-      </button>
-      <pre className="mt-4 bg-gray-100 p-3 rounded whitespace-pre-wrap">{output}</pre>
     </div>
-  );
-}
-        // Neural Network Visualizer Component
-        function NeuralViz() {
-            const [neurons, setNeurons] = useState([]);
 
-            useEffect(() => {
-                const newNeurons = [];
-                for (let i = 0; i < 12; i++) {
-                    newNeurons.push({
-                        id: i,
-                        x: Math.random() * 280,
-                        y: Math.random() * 140,
-                        delay: Math.random() * 2
-                    });
-                }
-                setNeurons(newNeurons);
-            }, []);
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Abdullah Ali. All rights reserved.</p>
+        <p style="color: var(--neon-blue);">AI Engineer • Security Specialist • Full Stack Developer</p>
+        <div class="social-links">
+            <a href="mailto:abdullah20109@yahoo.fr" title="Email"><i class="fas fa-envelope"></i></a>
+            <a href="tel:+15199818202" title="Phone"><i class="fas fa-phone"></i></a>
+            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </div>
+    </footer>
 
-            return (
-                <div className="neural-network">
-                    {neurons.map(neuron => (
-                        <div
-                            key={neuron.id}
-                            className="neuron"
-                            style={{
-                                left: `${neuron.x}px`,
-                                top: `${neuron.y}px`,
-                                animationDelay: `${neuron.delay}s`
-                            }}
-                        />
-                    ))}
-                    <div style={{
-                        position: 'absolute',
-                        bottom: '10px',
-                        left: '10px',
-                        color: '#667eea',
-                        fontSize: '0.8rem'
-                    }}>
-                        Neural Network Processing...
-                    </div>
-                </div>
-            );
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        // Create Particles
+        function createParticles() {
+            const container = document.getElementById('particlesContainer');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.background = `radial-gradient(circle, ${Math.random() > 0.5 ? '#00D4FF' : '#E500FF'} 0%, transparent 70%)`;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
         }
+        createParticles();
 
-        // Blockchain Demo Component
-        function BlockchainDemo() {
-            const [blocks, setBlocks] = useState([
-                { id: 1, hash: 'Genesis', data: 'Initial Block' },
-                { id: 2, hash: 'A7B9C3', data: 'Transaction 1' },
-                { id: 3, hash: 'D4E8F2', data: 'Transaction 2' }
-            ]);
-
-            const addBlock = () => {
-                const newBlock = {
-                    id: blocks.length + 1,
-                    hash: Math.random().toString(36).substr(2, 6).toUpperCase(),
-                    data: `Transaction ${blocks.length}`
-                };
-                setBlocks([...blocks, newBlock]);
-            };
-
-            return (
-                <div>
-                    <div className="blockchain-chain">
-                        {blocks.map(block => (
-                            <div key={block.id} className="block">
-                                <div style={{fontSize: '0.7rem'}}>#{block.id}</div>
-                                <div>{block.hash}</div>
-                            </div>
-                        ))}
-                    </div>
-                    <button className="btn" onClick={addBlock} style={{width: '100%'}}>
-                        ⛏️ Mine New Block
-                    </button>
-                </div>
-            );
-        }
-
-        // Analytics Dashboard Component
-        function AnalyticsDashboard() {
-            const [metrics, setMetrics] = useState({
-                users: 1234,
-                revenue: 45678,
-                conversion: 3.4,
-                traffic: 8901
-            });
-
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    setMetrics(prev => ({
-                        users: prev.users + Math.floor(Math.random() * 10),
-                        revenue: prev.revenue + Math.floor(Math.random() * 100),
-                        conversion: (Math.random() * 5 + 2).toFixed(1),
-                        traffic: prev.traffic + Math.floor(Math.random() * 50)
-                    }));
-                }, 2000);
-
-                return () => clearInterval(interval);
-            }, []);
-
-            return (
-                <div className="analytics-grid">
-                    <div className="metric-card">
-                        <div>Active Users</div>
-                        <div className="metric-value">{metrics.users.toLocaleString()}</div>
-                    </div>
-                    <div className="metric-card">
-                        <div>Revenue</div>
-                        <div className="metric-value">${metrics.revenue.toLocaleString()}</div>
-                    </div>
-                    <div className="metric-card">
-                        <div>Conversion</div>
-                        <div className="metric-value">{metrics.conversion}%</div>
-                    </div>
-                    <div className="metric-card">
-                        <div>Traffic</div>
-                        <div className="metric-value">{metrics.traffic.toLocaleString()}</div>
-                    </div>
-                </div>
-            );
-        }
-
-        // Quantum Maze Game Component
-        function QuantumMaze() {
-            const [maze, setMaze] = useState([]);
-            const [playerPos, setPlayerPos] = useState(0);
-            const [goalPos] = useState(35);
-
-            useEffect(() => {
-                const newMaze = Array(36).fill(0).map((_, i) => {
-                    if (i === 0) return 'player';
-                    if (i === 35) return 'goal';
-                    if (Math.random() < 0.3) return 'wall';
-                    if (Math.random() < 0.1) return 'quantum';
-                    return 'empty';
-                });
-                setMaze(newMaze);
-            }, []);
-
-            const movePlayer = (index) => {
-                if (maze[index] === 'wall') return;
-                
-                const newMaze = [...maze];
-                newMaze[playerPos] = 'empty';
-                newMaze[index] = 'player';
-                setMaze(newMaze);
-                setPlayerPos(index);
-                
-                if (index === goalPos) {
-                    alert('🎉 Quantum maze solved! Reality collapsed successfully!');
-                }
-            };
-
-            return (
-                <div className="quantum-maze">
-                    {maze.map((cell, index) => (
-                        <div
-                            key={index}
-                            className={`maze-cell ${cell}`}
-                            onClick={() => movePlayer(index)}
-                            title={cell === 'quantum' ? 'Quantum superposition cell' : ''}
-                        />
-                    ))}
-                </div>
-            );
-        }
-
-        // Security Scanner Component
-        function SecurityScanner() {
-        const [url, setUrl] = useState('');
-
-  const handleScan = (scanner) => {
-    if (!url) return;
-    let scanUrl = '';
-    switch (scanner) {
-      case 'hostedscan':
-        scanUrl = `https://hostedscan.com/owasp-vulnerability-scan?target=${encodeURIComponent(url)}`;
-        break;
-      case 'internetsecure':
-        scanUrl = `https://internetsecure.org/?q=${encodeURIComponent(url)}`;
-        break;
-      default:
-        break;
-    }
-    if (scanUrl) {
-      window.open(scanUrl, '_blank');
-    }
-  };
-
-  return (
-    <div style={{ padding: '2rem', background: '#f9fafb', borderRadius: '1rem', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
-      <h2 style={{ color: '#4F46E5' }}>🛡️ Website Security Scanner</h2>
-      <input
-        type="text"
-        placeholder="Enter website URL (e.g., https://example.com)"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        style={{ padding: '0.5rem', width: '100%', borderRadius: '8px', marginBottom: '1rem' }}
-      />
-      <div>
-        <button
-          onClick={() => handleScan('hostedscan')}
-          style={{ padding: '0.5rem 1rem', marginRight: '1rem', backgroundColor: '#4F46E5', color: 'white', borderRadius: '8px' }}
-        >
-          Scan with HostedScan
-        </button>
-        <button
-          onClick={() => handleScan('internetsecure')}
-          style={{ padding: '0.5rem 1rem', backgroundColor: '#10B981', color: 'white', borderRadius: '8px' }}
-        >
-          Scan with InternetSecure
-        </button>
-      </div>
-    </div>
-  );
-}
-function CurrencyConverter() {
- const [currencies, setCurrencies] = useState({});
-  const [fromCurrency, setFromCurrency] = useState('USD');
-  const [toCurrency, setToCurrency] = useState('EUR');
-  const [amount, setAmount] = useState(1);
-  const [convertedAmount, setConvertedAmount] = useState(null);
-
-  useEffect(() => {
-    fetch('https://api.frankfurter.app/currencies')
-      .then(res => res.json())
-      .then(data => setCurrencies(data));
-  }, []);
-
-  useEffect(() => {
-    if (fromCurrency && toCurrency && amount && fromCurrency !== toCurrency) {
-      fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${fromCurrency}&to=${toCurrency}`)
-        .then(res => res.json())
-        .then(data => setConvertedAmount(data.rates[toCurrency]))
-        .catch(() => setConvertedAmount('Error'));
-    } else if (fromCurrency === toCurrency) {
-      setConvertedAmount(amount);
-    }
-  }, [fromCurrency, toCurrency, amount]);
-
-  const getFlagUrl = (currencyCode) => {
-    const countryCode = currencyCode.substring(0, 2).toLowerCase();
-    return `https://flagcdn.com/32x24/${countryCode}.png`;
-  };
-
-  return (
-    <div className="max-w-xl mx-auto bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl shadow-2xl p-8 text-white">
-      <h2 className="text-3xl font-bold mb-6 text-center">💱 Currency Converter</h2>
-
-      <input
-        type="number"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className="w-full p-3 rounded-xl text-gray-800 text-lg focus:outline-none mb-4"
-        min="0"
-      />
-
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-sm mb-1">From:</label>
-          <select
-            className="w-full p-3 rounded-xl text-gray-800 focus:outline-none"
-            value={fromCurrency}
-            onChange={(e) => setFromCurrency(e.target.value)}
-          >
-            {Object.keys(currencies).map(code => (
-              <option key={code} value={code}>{code} - {currencies[code]}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm mb-1">To:</label>
-          <select
-            className="w-full p-3 rounded-xl text-gray-800 focus:outline-none"
-            value={toCurrency}
-            onChange={(e) => setToCurrency(e.target.value)}
-          >
-            {Object.keys(currencies).map(code => (
-              <option key={code} value={code}>{code} - {currencies[code]}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      {convertedAmount !== null && (
-        <div className="bg-white text-indigo-600 text-center rounded-xl py-4 mt-4">
-          <p className="text-sm">Converted Amount</p>
-          <p className="text-2xl font-bold">
-            {convertedAmount} {toCurrency}
-            <img src={getFlagUrl(toCurrency)} alt={toCurrency} className="inline ml-2 rounded" />
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// WeatherDashboard.jsx
-
-function WeatherDashboard() {
-  const [city, setCity] = useState('');
-  const [weather, setWeather] = useState(null);
-  const [background, setBackground] = useState('');
-
-  const weatherIcons = {
-    clear: '☀️',
-    clouds: '☁️',
-    rain: '🌧️',
-    snow: '❄️',
-    thunderstorm: '⛈️',
-    drizzle: '🌦️',
-    mist: '🌫️'
-  };
-
-  const getWeather = async () => {
-    const locationRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
-    const locationData = await locationRes.json();
-    if (!locationData.results || locationData.results.length === 0) return alert('City not found');
-
-    const { latitude, longitude, country_code } = locationData.results[0];
-    const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
-    const weatherData = await weatherRes.json();
-    const current = weatherData.current_weather;
-
-    const icon = current.weathercode < 3 ? 'clear' : current.weathercode < 45 ? 'clouds' : 'rain';
-    setBackground(icon);
-    setWeather({ ...current, country_code });
-  };
-
-  const getBackgroundStyle = () => {
-    const styles = {
-      clear: 'bg-gradient-to-r from-yellow-300 to-orange-500',
-      clouds: 'bg-gradient-to-r from-gray-300 to-gray-600',
-      rain: 'bg-gradient-to-r from-blue-400 to-blue-700',
-      snow: 'bg-gradient-to-r from-blue-100 to-white',
-      thunderstorm: 'bg-gradient-to-r from-purple-600 to-indigo-900',
-      drizzle: 'bg-gradient-to-r from-blue-200 to-cyan-400',
-      mist: 'bg-gradient-to-r from-gray-200 to-gray-400'
-    };
-    return styles[background] || 'bg-gray-200';
-  };
-
-  return (
-    <div className={`p-6 max-w-md mx-auto rounded-3xl shadow-xl text-white ${getBackgroundStyle()}`}>
-      <h2 className="text-2xl font-bold text-center mb-4">🌤️ Weather Dashboard</h2>
-
-      <input
-        type="text"
-        placeholder="Enter city name"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-        className="w-full p-2 rounded-md text-black mb-4"
-      />
-      <button
-        onClick={getWeather}
-        className="w-full bg-white text-indigo-600 p-2 rounded-lg font-semibold hover:bg-gray-100 transition"
-      >
-        Get Weather
-      </button>
-
-      {weather && (
-        <div className="mt-6 bg-white text-black p-4 rounded-lg shadow-lg space-y-2">
-          <div className="text-3xl text-center">
-            {weatherIcons[background] || '🌡️'} {city.toUpperCase()}
-            {weather.country_code && (
-              <img
-                src={`https://flagcdn.com/24x18/${weather.country_code.toLowerCase()}.png`}
-                alt={weather.country_code}
-                className="inline ml-2"
-              />
-            )}
-          </div>
-          <p><strong>Temperature:</strong> {weather.temperature}°C</p>
-          <p><strong>Wind:</strong> {weather.windspeed} km/h</p>
-          <p><strong>Direction:</strong> {weather.winddirection}°</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-        function InvoicePDF() {
-            const [company, setCompany] = useState('My Company Inc.');
-  const [client, setClient] = useState('Client Name');
-  const [invoiceNumber, setInvoiceNumber] = useState('INV-001');
-  const [taxRate, setTaxRate] = useState(0);
-  const [status, setStatus] = useState('Unpaid');
-  const [items, setItems] = useState([
-    { description: '', quantity: 1, price: 0 }
-  ]);
-
-  const handleItemChange = (index, field, value) => {
-    const updated = [...items];
-    updated[index][field] = field === 'description' ? value : Number(value);
-    setItems(updated);
-  };
-
-  const addItem = () => setItems([...items, { description: '', quantity: 1, price: 0 }]);
-  const removeItem = (i) => setItems(items.filter((_, idx) => idx !== i));
-
-  const subtotal = items.reduce((acc, i) => acc + i.quantity * i.price, 0);
-  const tax = subtotal * (taxRate / 100);
-  const total = subtotal + tax;
-
-  const downloadPDF = () => {
-    const doc = new window.jspdf.jsPDF();
-
-    doc.setFontSize(18);
-    doc.text(company, 20, 20);
-    doc.setFontSize(12);
-    doc.text(`Invoice #: ${invoiceNumber}`, 20, 30);
-    doc.text(`Client: ${client}`, 20, 37);
-    doc.text(`Status: ${status}`, 20, 44);
-
-    doc.setLineWidth(0.5);
-    doc.line(20, 50, 190, 50);
-
-    doc.setFontSize(12);
-    doc.text('Description', 20, 58);
-    doc.text('Qty', 100, 58);
-    doc.text('Price', 130, 58);
-    doc.text('Total', 160, 58);
-
-    let y = 65;
-    items.forEach((item) => {
-      doc.text(item.description, 20, y);
-      doc.text(item.quantity.toString(), 100, y);
-      doc.text(`$${item.price.toFixed(2)}`, 130, y);
-      doc.text(`$${(item.quantity * item.price).toFixed(2)}`, 160, y);
-      y += 10;
-    });
-
-    doc.line(20, y, 190, y);
-    y += 10;
-    doc.text(`Subtotal: $${subtotal.toFixed(2)}`, 130, y);
-    y += 7;
-    doc.text(`Tax (${taxRate}%): $${tax.toFixed(2)}`, 130, y);
-    y += 7;
-    doc.text(`Total: $${total.toFixed(2)}`, 130, y);
-
-    doc.save(`${invoiceNumber}.pdf`);
-  };
-
-  return (
-    <div className="card p-6 max-w-2xl mx-auto bg-white rounded-xl shadow-lg space-y-6">
-      <h2 className="text-xl font-bold text-indigo-600">🧾 Invoice Generator</h2>
-
-      <div className="grid grid-cols-2 gap-4">
-        <input type="text" className="border p-2 rounded" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Your Company Name" />
-        <input type="text" className="border p-2 rounded" value={client} onChange={(e) => setClient(e.target.value)} placeholder="Client Name" />
-        <input type="text" className="border p-2 rounded" value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} placeholder="Invoice #" />
-        <select className="border p-2 rounded" value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option>Unpaid</option>
-          <option>Paid</option>
-        </select>
-      </div>
-
-      <div className="flex gap-2 items-center">
-        <label className="text-sm">Tax %:</label>
-        <input type="number" min="0" className="w-20 border p-1 rounded" value={taxRate} onChange={(e) => setTaxRate(Number(e.target.value))} />
-      </div>
-
-      {items.map((item, i) => (
-        <div key={i} className="flex gap-2 items-center">
-          <input className="flex-1 p-2 border rounded" placeholder="Item" value={item.description} onChange={(e) => handleItemChange(i, 'description', e.target.value)} />
-          <input type="number" min="1" className="w-20 p-2 border rounded" value={item.quantity} onChange={(e) => handleItemChange(i, 'quantity', e.target.value)} />
-          <input type="number" className="w-24 p-2 border rounded" value={item.price} onChange={(e) => handleItemChange(i, 'price', e.target.value)} />
-          <button onClick={() => removeItem(i)} className="text-red-500">✕</button>
-        </div>
-      ))}
-
-      <button onClick={addItem} className="bg-green-500 text-white px-4 py-2 rounded">Add Line Item</button>
-
-      <div className="text-right font-bold text-lg">
-        Total: ${total.toFixed(2)}
-      </div>
-
-      <button onClick={downloadPDF} className="bg-indigo-600 text-white w-full py-2 rounded hover:bg-indigo-700 transition">
-        Download PDF
-      </button>
-    </div>
-  );
-}
-
-
-        // Render all components
-        ReactDOM.render(<CryptoGame />, document.getElementById('crypto-game'));
-        ReactDOM.render(<AIGenerator />, document.getElementById('ai-generator'));
-        ReactDOM.render(<CurrencyConverter />, document.getElementById('neural-viz'));
-        ReactDOM.render(<InvoicePDF />, document.getElementById('blockchain-demo'));
-        ReactDOM.render(<WeatherDashboard/>, document.getElementById('analytics-dashboard'));
-        ReactDOM.render(<SecurityScanner />, document.getElementById('security-scanner'));
-        
-
-        // Chart.js implementation
-        const ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Project Completion Rate',
-                    data: [65, 75, 80, 85, 90, 95],
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    borderWidth: 3,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
-                    }
-                }
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
         });
 
-        // Smooth scrolling for navigation
+        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             });
         });
+
+        // Helper Function for API Calls
+        async function callDeepSeekAPI(prompt, imageData = null) {
+            try {
+                const requestBody = imageData
+                    ? { prompt: prompt, image: imageData, type: 'vision' }
+                    : { prompt: prompt, type: 'text' };
+
+                const response = await fetch('https://ai-api-m176.vercel.app/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+                const data = await response.json();
+                let output = data.output || 'No response generated.';
+
+                // Remove DeepSeek-R1 reasoning/thinking process from output
+                output = output.replace(/<think>[\s\S]*?<\/think>/gi, '');
+                output = output.replace(/<thinking>[\s\S]*?<\/thinking>/gi, '');
+                output = output.replace(/^[\s\S]*?(?:Let me think|I think|Thinking:|Reasoning:|Analysis:)[\s\S]*?\n\n/im, '');
+                output = output.trim().replace(/\n{3,}/g, '\n\n');
+
+                if (!output || output.length < 10) {
+                    output = data.output || 'No response generated.';
+                }
+
+                return output;
+            } catch (error) {
+                console.error('API Error:', error);
+                return 'Sorry, there was an error processing your request. Please try again.';
+            }
+        }
+
+        // Vision-specific API call
+        async function analyzeImageWithAI(imageData, context = '') {
+            try {
+                const response = await fetch('https://ai-api-m176.vercel.app/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image: imageData,
+                        prompt: context,
+                        type: 'vision'
+                    })
+                });
+                const data = await response.json();
+                return data.output || data.imageAnalysis || 'Unable to analyze image';
+            } catch (error) {
+                console.error('Vision API Error:', error);
+                return 'Unable to analyze image. Using text-based analysis.';
+            }
+        }
+
+        // VOICE & VISION HELPERS
+        let recognition = null;
+        let isListening = false;
+        let speechSynthesis = window.speechSynthesis;
+
+        // Initialize Speech Recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('chatInput').value = transcript;
+                toggleVoiceInput(); // Stop listening
+                sendChatMessage(); // Auto-send
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                toggleVoiceInput();
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                const btn = document.getElementById('voiceBtn');
+                if (btn) btn.classList.remove('active');
+            };
+        }
+
+        function toggleVoiceInput() {
+            if (!recognition) {
+                alert('Voice recognition not supported in this browser. Please use Chrome or Edge.');
+                return;
+            }
+
+            const btn = document.getElementById('voiceBtn');
+
+            if (isListening) {
+                recognition.stop();
+                isListening = false;
+                btn.classList.remove('active');
+            } else {
+                recognition.start();
+                isListening = true;
+                btn.classList.add('active');
+            }
+        }
+
+
+        // Vision AI - Analyze Image
+        async function analyzeImage(imageDataUrl, context = 'general') {
+            try {
+                const response = await fetch('https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer hf_YOUR_TOKEN_HERE', // User needs to add their HF token
+                    },
+                    body: imageDataUrl.split(',')[1]
+                });
+
+                const result = await response.json();
+                return result[0]?.generated_text || 'Unable to analyze image';
+            } catch (error) {
+                console.error('Vision API Error:', error);
+                // Fallback: Use AI to analyze based on context
+                return `Image uploaded successfully. Please describe what you see or ask your question about it.`;
+            }
+        }
+
+        // PROJECT 1: AI CHATBOT WITH VOICE & MEMORY
+        let chatHistory = [];  // Store conversation history
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const container = document.getElementById('chatContainer');
+
+            // Add user message
+            container.innerHTML += `
+                <div class="message user">
+                    <div class="message-bubble">${message}</div>
+                </div>
+            `;
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // Add to history
+            chatHistory.push({ role: 'user', content: message });
+
+            // Show typing indicator
+            const typingId = 'typing-' + Date.now();
+            container.innerHTML += `
+                <div class="message ai" id="${typingId}">
+                    <div class="message-bubble">
+                        <div class="typing-indicator">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+
+            // Build context from conversation history (last 10 messages)
+            const recentHistory = chatHistory.slice(-10);
+            let contextPrompt = "You are a helpful AI assistant. Here's the conversation history:\n\n";
+
+            recentHistory.forEach(msg => {
+                if (msg.role === 'user') {
+                    contextPrompt += `User: ${msg.content}\n`;
+                } else {
+                    contextPrompt += `Assistant: ${msg.content}\n`;
+                }
+            });
+
+            contextPrompt += `\nProvide a clear, helpful response that considers the conversation context.`;
+
+            // Get AI response with context
+            const response = await callDeepSeekAPI(contextPrompt);
+
+            // Add to history
+            chatHistory.push({ role: 'assistant', content: response });
+
+            // Remove typing indicator and add response
+            document.getElementById(typingId).remove();
+            container.innerHTML += `
+                <div class="message ai">
+                    <div class="message-bubble">${response}</div>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Clear chat function (optional - add button if needed)
+        function clearChat() {
+            chatHistory = [];
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = `
+                <div class="message ai">
+                    <div class="message-bubble">Hello! I'm your AI assistant with voice input. Ask me anything about coding, technology, or let me help you brainstorm ideas!</div>
+                </div>
+            `;
+        }
+
+        // PROJECT 2: CRYPTO DASHBOARD
+        const cryptoSymbols = ['bitcoin', 'ethereum', 'solana', 'cardano'];
+        let cryptoData = {};
+        let cryptoChart = null;
+
+        async function updateCrypto() {
+            try {
+                const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoSymbols.join(',')}&vs_currencies=usd&include_24hr_change=true`);
+                const data = await response.json();
+
+                const grid = document.getElementById('cryptoGrid');
+                grid.innerHTML = '';
+
+                cryptoSymbols.forEach(symbol => {
+                    const crypto = data[symbol];
+                    if (crypto) {
+                        const change = crypto.usd_24h_change || 0;
+                        const changeClass = change >= 0 ? 'positive' : 'negative';
+                        const changeSymbol = change >= 0 ? '+' : '';
+
+                        grid.innerHTML += `
+                            <div class="crypto-card">
+                                <div class="crypto-symbol">${symbol.toUpperCase().slice(0,3)}</div>
+                                <div class="crypto-price">$${crypto.usd.toFixed(2)}</div>
+                                <div class="crypto-change ${changeClass}">${changeSymbol}${change.toFixed(2)}%</div>
+                            </div>
+                        `;
+                        cryptoData[symbol] = crypto.usd;
+                    }
+                });
+
+                updateCryptoChart();
+            } catch (error) {
+                console.error('Crypto API Error:', error);
+            }
+        }
+
+        function updateCryptoChart() {
+            const ctx = document.getElementById('cryptoChart');
+            if (!ctx) return;
+
+            if (cryptoChart) {
+                cryptoChart.destroy();
+            }
+
+            cryptoChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: cryptoSymbols.map(s => s.toUpperCase().slice(0,3)),
+                    datasets: [{
+                        label: 'Price (USD)',
+                        data: cryptoSymbols.map(s => cryptoData[s] || 0),
+                        borderColor: '#00D4FF',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#fff' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#fff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        updateCrypto();
+        setInterval(updateCrypto, 30000);
+
+        // PROJECT 3: MEDICAL SYMPTOM CHECKER
+        const symptoms = ['Headache', 'Fever', 'Cough', 'Fatigue', 'Sore Throat', 'Body Aches', 'Nausea', 'Dizziness'];
+        const selectedSymptoms = new Set();
+
+        function initSymptoms() {
+            const container = document.getElementById('symptomTags');
+            symptoms.forEach(symptom => {
+                const tag = document.createElement('div');
+                tag.className = 'symptom-tag';
+                tag.textContent = symptom;
+                tag.onclick = () => {
+                    tag.classList.toggle('active');
+                    if (tag.classList.contains('active')) {
+                        selectedSymptoms.add(symptom);
+                    } else {
+                        selectedSymptoms.delete(symptom);
+                    }
+                };
+                container.appendChild(tag);
+            });
+        }
+        initSymptoms();
+
+        async function analyzeSymptoms() {
+            if (selectedSymptoms.size === 0) {
+                alert('Please select at least one symptom');
+                return;
+            }
+
+            const severity = document.getElementById('severitySelect').value;
+            if (!severity) {
+                alert('Please select severity level');
+                return;
+            }
+
+            const container = document.getElementById('symptomAnalysis');
+            container.innerHTML = '<div class="loading"></div> Analyzing symptoms...';
+
+            const symptomList = Array.from(selectedSymptoms).join(', ');
+            const prompt = `As a medical AI assistant, analyze these symptoms: ${symptomList}. Severity: ${severity}. Provide: 1) Possible conditions (2-3), 2) Recommended actions, 3) When to seek immediate medical care. Keep it concise and clear. Include disclaimer.`;
+
+            const response = await callDeepSeekAPI(prompt);
+
+            container.innerHTML = `
+                <div class="analysis-result">
+                    <h4><i class="fas fa-notes-medical"></i> Analysis Results</h4>
+                    <div style="margin-top: 1rem; white-space: pre-wrap;">${response}</div>
+                </div>
+                <div class="disclaimer">
+                    <strong>⚠️ Medical Disclaimer:</strong> This is not professional medical advice. Always consult a qualified healthcare provider for diagnosis and treatment.
+                </div>
+            `;
+        }
+
+        // PROJECT 4: RECIPE GENERATOR WITH FOOD VISION
+        const ingredients = [];
+        const activeFilters = [];
+        let foodImageData = null;
+
+        function handleFoodImage(event) {
+            const file = event.target.files[0];
+            if (!file || !file.type.startsWith('image/')) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                foodImageData = e.target.result;
+                const preview = document.getElementById('foodImagePreview');
+                preview.innerHTML = `
+                    <div class="image-analysis">
+                        <img src="${e.target.result}" class="image-preview" alt="Food Ingredients">
+                        <p style="color: var(--neon-blue); margin-top: 0.5rem;">✓ Analyzing ingredients in photo...</p>
+                    </div>
+                `;
+
+                // Simulate ingredient detection (in production, use vision API)
+                setTimeout(() => {
+                    preview.innerHTML += `
+                        <p style="color: var(--light-gray); font-size: 0.9rem; margin-top: 0.5rem;">
+                            Tip: AI will analyze visible ingredients when you generate the recipe
+                        </p>
+                    `;
+                }, 1000);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function addIngredient() {
+            const input = document.getElementById('ingredientInput');
+            const ingredient = input.value.trim();
+            if (!ingredient) return;
+
+            ingredients.push(ingredient);
+            input.value = '';
+
+            updateIngredientTags();
+        }
+
+        function removeIngredient(index) {
+            ingredients.splice(index, 1);
+            updateIngredientTags();
+        }
+
+        function updateIngredientTags() {
+            const container = document.getElementById('ingredientTags');
+            container.innerHTML = ingredients.map((ing, idx) => `
+                <div class="ingredient-tag">
+                    <span>${ing}</span>
+                    <span class="remove" onclick="removeIngredient(${idx})">×</span>
+                </div>
+            `).join('');
+        }
+
+        function toggleFilter(element) {
+            element.classList.toggle('active');
+            const filter = element.textContent;
+            const index = activeFilters.indexOf(filter);
+            if (index > -1) {
+                activeFilters.splice(index, 1);
+            } else {
+                activeFilters.push(filter);
+            }
+        }
+
+        async function generateRecipe() {
+            if (ingredients.length === 0 && !foodImageData) {
+                alert('Please add ingredients or upload a photo');
+                return;
+            }
+
+            const container = document.getElementById('recipeResult');
+            container.innerHTML = '<div class="loading"></div> Generating recipe with AI vision...';
+
+            const dietaryInfo = activeFilters.length > 0 ? `Dietary restrictions: ${activeFilters.join(', ')}.` : '';
+
+            let response;
+
+            if (foodImageData) {
+                // Use vision AI to identify ingredients in photo
+                const manualIngredients = ingredients.length > 0 ? ` Manual ingredients added: ${ingredients.join(', ')}.` : '';
+                const prompt = `Analyze this food/ingredient photo and identify what ingredients you can see.${manualIngredients} ${dietaryInfo} Create a delicious recipe using these ingredients. Include: 1) Recipe name, 2) Complete ingredients list with amounts, 3) Step-by-step instructions (numbered), 4) Cooking time, 5) Difficulty level. Be creative and practical!`;
+
+                response = await callDeepSeekAPI(prompt, foodImageData);
+            } else {
+                // Text-only recipe generation
+                const prompt = `Create a recipe using these ingredients: ${ingredients.join(', ')}. ${dietaryInfo} Include: 1) Recipe name, 2) Ingredients with amounts, 3) Step-by-step instructions (numbered), 4) Cooking time, 5) Difficulty level. Format nicely.`;
+                response = await callDeepSeekAPI(prompt);
+            }
+
+            container.innerHTML = `
+                <div class="recipe-result">
+                    <h4><i class="fas fa-utensils"></i> Your Recipe ${foodImageData ? '(Vision AI)' : ''}</h4>
+                    <div style="margin-top: 1rem; white-space: pre-wrap;">${response}</div>
+                </div>
+            `;
+        }
+
+        // PROJECT 5: SPORTS DASHBOARD
+        let currentSport = 'soccer';
+
+        function switchSport(element, sport) {
+            document.querySelectorAll('.sport-tab').forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+            currentSport = sport;
+            loadMatches();
+        }
+
+        function loadMatches() {
+            const container = document.getElementById('matchesContainer');
+
+            // Mock data - in production, use real API
+            const mockMatches = {
+                soccer: [
+                    { team1: 'Arsenal', team2: 'Chelsea', score1: 2, score2: 1, status: 'Live' },
+                    { team1: 'Man City', team2: 'Liverpool', score1: 3, score2: 3, status: 'Finished' },
+                    { team1: 'Barcelona', team2: 'Real Madrid', score1: 0, score2: 0, status: 'Upcoming' }
+                ],
+                basketball: [
+                    { team1: 'Lakers', team2: 'Warriors', score1: 105, score2: 98, status: 'Live' },
+                    { team1: 'Celtics', team2: 'Heat', score1: 112, score2: 108, status: 'Finished' },
+                    { team1: 'Nets', team2: 'Bucks', score1: 0, score2: 0, status: 'Upcoming' }
+                ]
+            };
+
+            const matches = mockMatches[currentSport] || [];
+            container.innerHTML = matches.map(match => `
+                <div class="match-card">
+                    <div class="match-teams">
+                        <div>${match.team1}</div>
+                        <div>${match.team2}</div>
+                    </div>
+                    <div class="match-score">${match.score1} - ${match.score2}</div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        ${match.status === 'Live' ? '<div class="live-indicator"></div>' : ''}
+                        <span style="color: ${match.status === 'Live' ? '#EF4444' : 'var(--light-gray)'}; font-size: 0.85rem;">${match.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        loadMatches();
+
+        // PROJECT 6: BUSINESS PLAN GENERATOR
+        async function generateBusinessPlan() {
+            const idea = document.getElementById('businessIdea').value.trim();
+            const industry = document.getElementById('industrySelect').value;
+
+            if (!idea || !industry) {
+                alert('Please enter business idea and select industry');
+                return;
+            }
+
+            const container = document.getElementById('businessPlanResult');
+            container.innerHTML = '<div class="loading"></div> Generating comprehensive business plan...';
+
+            const prompt = `Create a comprehensive business plan for: "${idea}" in the ${industry} industry. Include: 1) Executive Summary (2-3 sentences), 2) Market Analysis, 3) Target Audience, 4) Value Proposition, 5) Revenue Model, 6) Marketing Strategy, 7) 3-Year Financial Projections (basic), 8) Key Milestones. Format with headers and clear sections.`;
+
+            const response = await callDeepSeekAPI(prompt);
+
+            container.innerHTML = `
+                <div class="recipe-result">
+                    <h4><i class="fas fa-briefcase"></i> Business Plan</h4>
+                    <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
+                    <button class="btn" style="margin-top: 1rem;" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent)">
+                        <i class="fas fa-copy"></i> Copy to Clipboard
+                    </button>
+                </div>
+            `;
+        }
+
+        // PROJECT 7: DOCUMENT ANALYZER WITH VISION
+        let docImageData = null;
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const preview = document.getElementById('docImagePreview');
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    docImageData = e.target.result;
+                    preview.innerHTML = `
+                        <div class="image-analysis">
+                            <img src="${e.target.result}" class="image-preview" alt="Document">
+                            <p style="color: var(--neon-blue); margin-top: 0.5rem;">✓ Image loaded - Click "Analyze Document" to process</p>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('docText').value = e.target.result;
+                    preview.innerHTML = '<p style="color: var(--neon-blue);">✓ Text file loaded</p>';
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        async function analyzeDocument() {
+            const docText = document.getElementById('docText').value.trim();
+
+            if (!docText && !docImageData) {
+                alert('Please upload a document or paste text');
+                return;
+            }
+
+            const container = document.getElementById('docAnalysis');
+            container.innerHTML = '<div class="loading"></div> Analyzing document with AI vision...';
+
+            let response;
+
+            if (docImageData) {
+                // Use vision API for image analysis
+                const context = docText ? `Additional context: ${docText}. ` : '';
+                const prompt = `${context}Analyze this document image and provide: 1) Document type, 2) What text/content you can see, 3) Key information extracted, 4) Important details, dates, or numbers, 5) Summary and recommendations.`;
+
+                response = await callDeepSeekAPI(prompt, docImageData);
+            } else {
+                // Text-only analysis
+                const prompt = `Analyze this document and provide: 1) Main topic summary (2-3 sentences), 2) Key points (5-7 bullet points), 3) Important dates/numbers if any, 4) Action items or recommendations. Document:\n\n${docText.substring(0, 2000)}`;
+                response = await callDeepSeekAPI(prompt);
+            }
+
+            container.innerHTML = `
+                <div class="analysis-section">
+                    <h4><i class="fas fa-file-alt"></i> Document Analysis ${docImageData ? '(Vision AI)' : ''}</h4>
+                    <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
+                </div>
+            `;
+        }
+
+        // PROJECT 8: HOMEWORK HELPER WITH PHOTO
+        let homeworkImageData = null;
+
+        function handleHomeworkImage(event) {
+            const file = event.target.files[0];
+            if (!file || !file.type.startsWith('image/')) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                homeworkImageData = e.target.result;
+                document.getElementById('homeworkImagePreview').innerHTML = `
+                    <div class="image-analysis">
+                        <img src="${e.target.result}" class="image-preview" alt="Homework Problem">
+                        <p style="color: var(--neon-blue); margin-top: 0.5rem;">✓ Problem photo uploaded</p>
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function solveHomework() {
+            const subject = document.getElementById('subjectSelect').value;
+            const question = document.getElementById('homeworkQuestion').value.trim();
+
+            if (!subject) {
+                alert('Please select a subject');
+                return;
+            }
+
+            if (!question && !homeworkImageData) {
+                alert('Please enter your question or upload a photo');
+                return;
+            }
+
+            const container = document.getElementById('homeworkSolution');
+            container.innerHTML = '<div class="loading"></div> Analyzing problem with AI vision...';
+
+            let response;
+
+            if (homeworkImageData) {
+                // Use vision AI to analyze the problem image
+                const context = question ? `Additional context: ${question}. ` : '';
+                const prompt = `${context}As an educational tutor for ${subject}, analyze this homework problem from the image. Provide: 1) What the problem is asking (identify equations, diagrams, or text), 2) Step-by-step solution (clearly numbered), 3) Explanation of key concepts used, 4) Final answer. Be thorough and educational.`;
+
+                response = await callDeepSeekAPI(prompt, homeworkImageData);
+            } else {
+                // Text-only problem
+                const prompt = `As an educational tutor, explain this ${subject} problem step-by-step for a student: "${question}". Provide: 1) Step-by-step solution (numbered), 2) Explanation of key concepts, 3) Final answer. Use simple language and show all working.`;
+                response = await callDeepSeekAPI(prompt);
+            }
+
+            container.innerHTML = `
+                <div class="analysis-section">
+                    <h4><i class="fas fa-graduation-cap"></i> Solution & Explanation ${homeworkImageData ? '(Vision AI)' : ''}</h4>
+                    <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
+                </div>
+            `;
+        }
+
+        // PROJECT 9: TRAVEL PLANNER
+        async function planTravel() {
+            const destination = document.getElementById('destination').value.trim();
+            const duration = document.getElementById('tripDuration').value;
+            const budget = document.getElementById('budgetLevel').value;
+
+            if (!destination || !duration || !budget) {
+                alert('Please fill in all travel details');
+                return;
+            }
+
+            const container = document.getElementById('travelPlan');
+            container.innerHTML = '<div class="loading"></div> Planning your trip...';
+
+            const prompt = `Create a ${duration}-day travel itinerary for ${destination}. Budget level: ${budget}. Include: 1) Day-by-day itinerary with morning/afternoon/evening activities, 2) Must-see attractions, 3) Restaurant recommendations, 4) Accommodation suggestions, 5) Estimated daily costs, 6) Travel tips. Format with clear day headers.`;
+
+            const response = await callDeepSeekAPI(prompt);
+
+            container.innerHTML = `
+                <div class="analysis-section">
+                    <h4><i class="fas fa-plane"></i> Your ${duration}-Day Itinerary</h4>
+                    <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
+                </div>
+            `;
+        }
+
+        // PROJECT 10: FINANCIAL ADVISOR
+        async function getFinancialAdvice() {
+            const income = document.getElementById('monthlyIncome').value;
+            const expenses = document.getElementById('monthlyExpenses').value;
+            const goal = document.getElementById('financialGoal').value;
+
+            if (!income || !expenses || !goal) {
+                alert('Please fill in all financial details');
+                return;
+            }
+
+            const container = document.getElementById('financialAdvice');
+            container.innerHTML = '<div class="loading"></div> Analyzing your finances...';
+
+            const savings = income - expenses;
+            const prompt = `As a financial advisor, analyze: Monthly Income: $${income}, Monthly Expenses: $${expenses}, Savings: $${savings}, Goal: ${goal}. Provide: 1) Budget analysis (spending breakdown recommendation using 50/30/20 rule), 2) Specific recommendations for their goal, 3) Savings strategy, 4) Investment suggestions if applicable, 5) Action steps (numbered). Be practical and specific.`;
+
+            const response = await callDeepSeekAPI(prompt);
+
+            container.innerHTML = `
+                <div class="analysis-section">
+                    <h4><i class="fas fa-chart-pie"></i> Your Personalized Financial Plan</h4>
+                    <div style="background: rgba(0, 212, 255, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <strong>Monthly Surplus:</strong> $${savings}
+                        <span style="color: ${savings > 0 ? '#10B981' : '#EF4444'}; margin-left: 0.5rem;">
+                            (${((savings/income)*100).toFixed(1)}% of income)
+                        </span>
+                    </div>
+                    <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
+                </div>
+            `;
+        }
+
+        // ===============================================
+        // QR CODE & SHARE FUNCTIONALITY (EXPO FEATURES)
+        // ===============================================
+
+        let qrCodeInstance = null;
+        let linkedInQRInstance = null;
+        let resumeQRInstance = null;
+
+        // Your actual contact information
+        const portfolioURL = 'https://abdullahresume.github.io/portfolio/'; // Your portfolio URL
+        const linkedInURL = 'https://www.linkedin.com/in/abdullahalidev/';
+        const whatsappNumber = '+15199818202'; // UPDATE THIS if different
+        const emailAddress = 'abdullah.ali.jobs@gmail.com';
+        const resumeURL = portfolioURL + 'resume.pdf'; // Place resume.pdf in your root folder
+
+        // QR Code Functions
+        document.getElementById('qrBtn').addEventListener('click', showQR);
+
+        function showQR() {
+            const modal = document.getElementById('qrModal');
+            modal.style.display = 'flex';
+
+            if (!qrCodeInstance) {
+                const qrcodeDiv = document.getElementById('qrcode');
+                qrcodeDiv.innerHTML = ''; // Clear previous
+                qrCodeInstance = new QRCode(qrcodeDiv, {
+                    text: portfolioURL,
+                    width: 256,
+                    height: 256,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+        }
+
+        function closeQR() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            if (canvas) {
+                const url = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = 'abdullah-ali-portfolio-qr.png';
+                link.href = url;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function printQR() {
+            const printWindow = window.open('', '_blank');
+            const canvas = document.querySelector('#qrcode canvas');
+            const qrImage = canvas.toDataURL('image/png');
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Abdullah Ali - Portfolio QR Code</title>
+                    <style>
+                        body {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            min-height: 100vh;
+                            margin: 0;
+                            font-family: Arial, sans-serif;
+                            background: white;
+                        }
+                        img {
+                            width: 300px;
+                            height: 300px;
+                            margin: 2rem;
+                        }
+                        h1 {
+                            color: #333;
+                            margin: 0.5rem;
+                        }
+                        p {
+                            color: #666;
+                            margin: 0.25rem;
+                        }
+                        .gradient-text {
+                            background: linear-gradient(90deg, #00D4FF, #E500FF);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Abdullah Ali</h1>
+                    <p class="gradient-text">AI Engineer & Security Specialist</p>
+                    <img src="${qrImage}" alt="Portfolio QR Code" />
+                    <p>Scan to view portfolio</p>
+                    <p style="font-size: 0.9em; color: #999;">${portfolioURL}</p>
+                </body>
+                </html>
+            `);
+
+            printWindow.document.close();
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
+        }
+
+        // Business Card Modal Functions
+        document.getElementById('businessCardBtn').addEventListener('click', showBusinessCard);
+
+        function showBusinessCard() {
+            const modal = document.getElementById('businessCardModal');
+            modal.style.display = 'flex';
+
+            // Generate all QR codes if not already generated
+            if (!linkedInQRInstance) {
+                // Portfolio QR
+                const qrPortfolioDiv = document.getElementById('qrPortfolio');
+                qrPortfolioDiv.innerHTML = '';
+                new QRCode(qrPortfolioDiv, {
+                    text: portfolioURL,
+                    width: 150,
+                    height: 150,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                // LinkedIn QR
+                const qrLinkedInDiv = document.getElementById('qrLinkedIn');
+                qrLinkedInDiv.innerHTML = '';
+                linkedInQRInstance = new QRCode(qrLinkedInDiv, {
+                    text: linkedInURL,
+                    width: 150,
+                    height: 150,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                // Resume QR
+                const qrResumeDiv = document.getElementById('qrResume');
+                qrResumeDiv.innerHTML = '';
+                resumeQRInstance = new QRCode(qrResumeDiv, {
+                    text: resumeURL,
+                    width: 150,
+                    height: 150,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+        }
+
+        function closeBusinessCard() {
+            document.getElementById('businessCardModal').style.display = 'none';
+        }
+
+        function downloadQRCode(type) {
+            let canvas, filename;
+
+            switch(type) {
+                case 'portfolio':
+                    canvas = document.querySelector('#qrPortfolio canvas');
+                    filename = 'Abdullah_Ali_Portfolio_QR.png';
+                    break;
+                case 'linkedin':
+                    canvas = document.querySelector('#qrLinkedIn canvas');
+                    filename = 'Abdullah_Ali_LinkedIn_QR.png';
+                    break;
+                case 'resume':
+                    canvas = document.querySelector('#qrResume canvas');
+                    filename = 'Abdullah_Ali_Resume_QR.png';
+                    break;
+            }
+
+            if (canvas) {
+                const url = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = url;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        // Share Functions
+        document.getElementById('shareBtn').addEventListener('click', showShare);
+
+        function showShare() {
+            document.getElementById('shareModal').style.display = 'flex';
+        }
+
+        function closeShare() {
+            document.getElementById('shareModal').style.display = 'none';
+        }
+
+        function shareWhatsApp() {
+            const text = "🚀 Check out Abdullah Ali's AI Engineering & Cybersecurity portfolio! Master's in CS (Cybersecurity), cutting-edge AI projects, and impressive skills.";
+            window.open(`https://wa.me/?text=${encodeURIComponent(text + '\n\n' + portfolioURL)}`, '_blank');
+        }
+
+        function shareLinkedIn() {
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(portfolioURL)}`, '_blank');
+        }
+
+        // NEW: Direct contact functions
+        function sendWhatsAppDirect() {
+            const message = "Hi Abdullah! I came across your portfolio and I'm impressed with your AI projects. I'd like to connect!";
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function connectLinkedIn() {
+            window.open(linkedInURL, '_blank');
+        }
+
+        function sendEmailDirect() {
+            const subject = "Let's Connect - Saw Your Portfolio";
+            const body = "Hi Abdullah,\n\nI came across your impressive AI Engineering portfolio and would love to connect!\n\n";
+            window.location.href = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+
+        function downloadResume() {
+            const link = document.createElement('a');
+            link.href = resumeURL;
+            link.download = 'Abdullah_Ali_Resume.pdf';
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function shareResume() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Abdullah Ali - Resume',
+                    text: 'Check out Abdullah Ali\'s resume',
+                    url: resumeURL
+                }).catch(err => console.log('Share failed', err));
+            } else {
+                // Fallback: copy resume link
+                navigator.clipboard.writeText(resumeURL).then(() => {
+                    alert('Resume link copied to clipboard!');
+                });
+            }
+        }
+
+        function shareEmail() {
+            const subject = "Abdullah Ali - AI Engineer & Cybersecurity Portfolio";
+            const body = `Hi there,\n\nI wanted to share Abdullah Ali's impressive portfolio with you:\n\n${portfolioURL}\n\nHighlights:\n✅ Master of Science in Computer Science (Cybersecurity Specialization)\n✅ AI Engineering & Cybersecurity Expert\n✅ 10 Advanced AI Projects (Voice, Vision, NLP)\n✅ Certified in Cybersecurity (ISC²)\n✅ Multilingual: Arabic, English, French\n\nDefinitely worth checking out!\n\nBest regards`;
+
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(portfolioURL).then(() => {
+                // Show success message with animation
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.style.background = 'linear-gradient(135deg, #00FF88, #00D4FF)';
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = portfolioURL;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Link copied to clipboard!');
+            });
+        }
+
+        // Visitor Counter
+        function initVisitorCounter() {
+            let count = localStorage.getItem('portfolioVisits') || 0;
+            count = parseInt(count) + 1;
+            localStorage.setItem('portfolioVisits', count);
+
+            // Animate counter
+            const counterElement = document.getElementById('visitorCount');
+            let currentCount = 0;
+            const interval = setInterval(() => {
+                if (currentCount < count) {
+                    currentCount++;
+                    counterElement.textContent = currentCount;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 50);
+        }
+
+        // Initialize visitor counter on page load
+        initVisitorCounter();
+
+        // Close modals on outside click
+        document.getElementById('qrModal').addEventListener('click', (e) => {
+            if (e.target.id === 'qrModal') closeQR();
+        });
+
+        document.getElementById('shareModal').addEventListener('click', (e) => {
+            if (e.target.id === 'shareModal') closeShare();
+        });
+
+        document.getElementById('businessCardModal').addEventListener('click', (e) => {
+            if (e.target.id === 'businessCardModal') closeBusinessCard();
+        });
+
+        // Close modals on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeQR();
+                closeShare();
+                closeBusinessCard();
+            }
+        });
+
+        // ===============================================
+        // END EXPO FEATURES
+        // ===============================================
     </script>
 </body>
 </html>

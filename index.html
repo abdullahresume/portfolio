@@ -2044,16 +2044,11 @@
                             <h3 class="project-title">Smart Recipe Generator</h3>
                         </div>
                     </div>
-                    <p class="project-description">AI chef with Vision! Upload a photo of your ingredients or type them manually. Get personalized recipes with dietary preferences.</p>
+                    <p class="project-description">AI-powered recipe generator. Enter your ingredients and dietary preferences to get personalized recipes.</p>
 
                     <div class="project-demo">
-                        <button class="image-upload-btn" onclick="document.getElementById('foodImage').click()" style="width: 100%; margin-bottom: 0.5rem;">
-                            <i class="fas fa-camera"></i> 📸 Upload Ingredients Photo (FREE Vision AI!)
-                        </button>
-                        <input type="file" id="foodImage" style="display: none;" accept="image/*" onchange="handleFoodImage(event)">
-                        <div id="foodImagePreview"></div>
                         <div class="ingredient-input">
-                            <input type="text" id="ingredientInput" placeholder="Or type ingredient and press Enter" onkeypress="if(event.key==='Enter') addIngredient()">
+                            <input type="text" id="ingredientInput" placeholder="Type ingredient and press Enter" onkeypress="if(event.key==='Enter') addIngredient()">
                         </div>
                         <div class="ingredient-tags" id="ingredientTags"></div>
                         <div class="dietary-filters">
@@ -2069,9 +2064,8 @@
                     </div>
 
                     <div class="project-tags">
-                        <span class="tag">Vision AI (FREE!)</span>
-                        <span class="tag">Image Recognition</span>
-                        <span class="tag">Recipe Generation</span>
+                        <span class="tag">AI Recipe Generation</span>
+                        <span class="tag">Dietary Preferences</span>
                         <span class="tag">Smart Kitchen</span>
                     </div>
                 </div>
@@ -2084,21 +2078,25 @@
                             <h3 class="project-title">Live Sports Score Dashboard</h3>
                         </div>
                     </div>
-                    <p class="project-description">Real-time sports scores and statistics for soccer and basketball. Stay updated with live matches and results.</p>
+                    <p class="project-description">Live soccer scores powered by API-Football. Search any team or league to see real-time matches, standings, and detailed statistics.</p>
 
                     <div class="project-demo">
-                        <div class="sport-tabs">
-                            <div class="sport-tab active" onclick="switchSport(this, 'soccer')">⚽ Soccer</div>
-                            <div class="sport-tab" onclick="switchSport(this, 'basketball')">🏀 Basketball</div>
+                        <input type="text" id="teamSearch" placeholder="Search team or league (e.g., Manchester United, Premier League)" style="margin-bottom: 1rem;">
+                        <button class="btn" onclick="searchFootball()" style="width: 100%; margin-bottom: 1rem;">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <div id="soccerData">
+                            <p style="color: var(--light-gray); text-align: center; padding: 2rem;">
+                                <i class="fas fa-search"></i><br>Search for any team or league to see live scores and stats
+                            </p>
                         </div>
-                        <div id="matchesContainer"></div>
                     </div>
 
                     <div class="project-tags">
-                        <span class="tag">Sports API</span>
-                        <span class="tag">Real-time</span>
-                        <span class="tag">Live Scores</span>
-                        <span class="tag">Multi-sport</span>
+                        <span class="tag">API-Football</span>
+                        <span class="tag">Live Soccer Data</span>
+                        <span class="tag">Real-time Scores</span>
+                        <span class="tag">Team Search</span>
                     </div>
                 </div>
 
@@ -2145,15 +2143,10 @@
                             <h3 class="project-title">Document Scanner & AI Analyzer</h3>
                         </div>
                     </div>
-                    <p class="project-description">AI-powered document analyzer with Vision! Upload photos of documents, receipts, or paste text. Get summaries, extract key information, and smart insights.</p>
+                    <p class="project-description">AI-powered document analyzer. Paste your document text to get summaries, extract key information, and smart insights.</p>
 
                     <div class="project-demo">
-                        <button class="image-upload-btn" onclick="document.getElementById('docImage').click()" style="width: 100%; margin-bottom: 0.5rem;">
-                            <i class="fas fa-camera"></i> 📸 Upload Document/Receipt Photo (FREE OCR!)
-                        </button>
-                        <input type="file" id="docImage" style="display: none;" accept="image/*" onchange="handleDocImage(event)">
-                        <div id="docImagePreview"></div>
-                        <textarea id="docText" placeholder="Or paste document text here..." style="margin-top: 0.5rem; min-height: 100px;"></textarea>
+                        <textarea id="docText" placeholder="Paste document text here..." style="min-height: 120px;"></textarea>
                         <button class="btn" onclick="analyzeDocument()" style="margin-top: 0.5rem;">
                             <i class="fas fa-search"></i> Analyze Document
                         </button>
@@ -2161,9 +2154,8 @@
                     </div>
 
                     <div class="project-tags">
-                        <span class="tag">Vision AI (FREE!)</span>
-                        <span class="tag">OCR/Text Recognition</span>
-                        <span class="tag">Document Analysis</span>
+                        <span class="tag">Text Analysis</span>
+                        <span class="tag">Document Summary</span>
                         <span class="tag">Smart Insights</span>
                     </div>
                 </div>
@@ -2176,7 +2168,7 @@
                             <h3 class="project-title">AI Homework Helper</h3>
                         </div>
                     </div>
-                    <p class="project-description">AI tutor with Vision! Upload photos of homework problems or type them. Get step-by-step solutions with concept explanations across all subjects.</p>
+                    <p class="project-description">AI tutor for all subjects. Type your homework question and get step-by-step solutions with concept explanations.</p>
 
                     <div class="project-demo">
                         <select id="subjectSelect" style="margin-bottom: 0.5rem;">
@@ -2187,12 +2179,7 @@
                             <option value="English">English</option>
                             <option value="History">History</option>
                         </select>
-                        <button class="image-upload-btn" onclick="document.getElementById('homeworkImage').click()" style="width: 100%; margin-bottom: 0.5rem;">
-                            <i class="fas fa-camera"></i> 📸 Upload Problem Photo (FREE OCR!)
-                        </button>
-                        <input type="file" id="homeworkImage" style="display: none;" accept="image/*" onchange="handleHomeworkImage(event)">
-                        <div id="homeworkImagePreview"></div>
-                        <textarea id="homeworkQuestion" placeholder="Or type your question..." style="margin-bottom: 1rem; min-height: 80px;"></textarea>
+                        <textarea id="homeworkQuestion" placeholder="Type your question..." style="margin-bottom: 1rem; min-height: 100px;"></textarea>
                         <button class="btn" onclick="solveHomework()">
                             <i class="fas fa-brain"></i> Get Help
                         </button>
@@ -2200,7 +2187,6 @@
                     </div>
 
                     <div class="project-tags">
-                        <span class="tag">Vision AI (FREE!)</span>
                         <span class="tag">AI Tutor</span>
                         <span class="tag">Step-by-Step</span>
                         <span class="tag">Multi-Subject</span>
@@ -2843,27 +2829,6 @@
         }
 
 
-        // Vision AI using your existing Vercel API endpoint
-        async function analyzeImageWithVision(imageDataUrl, prompt = '') {
-            try {
-                // Use your existing API - it already handles vision!
-                const response = await fetch('https://ai-api-m176.vercel.app/api/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        image: imageDataUrl,
-                        prompt: prompt,
-                        type: 'vision'
-                    })
-                });
-
-                const data = await response.json();
-                return data.output || data.imageAnalysis || 'Unable to analyze image';
-            } catch (error) {
-                console.error('Vision Error:', error);
-                return 'Vision API temporarily unavailable. Try again in a few seconds.';
-            }
-        }
 
         // PROJECT 1: AI CHATBOT WITH VOICE & MEMORY
         let chatHistory = [];  // Store conversation history
@@ -3077,36 +3042,9 @@
             `;
         }
 
-        // PROJECT 4: RECIPE GENERATOR WITH FREE VISION AI
+        // PROJECT 4: RECIPE GENERATOR
         const ingredients = [];
         const activeFilters = [];
-        let foodImageData = null;
-
-        function handleFoodImage(event) {
-            const file = event.target.files[0];
-            if (!file || !file.type.startsWith('image/')) return;
-
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                foodImageData = e.target.result;
-                const preview = document.getElementById('foodImagePreview');
-                preview.innerHTML = `
-                    <div class="image-analysis">
-                        <img src="${e.target.result}" class="image-preview" alt="Ingredients">
-                        <p style="color: var(--neon-blue); margin-top: 0.5rem;">🔄 Analyzing ingredients with Vision AI...</p>
-                    </div>
-                `;
-
-                // Analyze with FREE Vision AI
-                const caption = await analyzeImageWithVision(foodImageData);
-                preview.innerHTML += `
-                    <p style="color: var(--light-gray); font-size: 0.9rem; margin-top: 0.5rem;">
-                        ✅ AI detected: ${caption}
-                    </p>
-                `;
-            };
-            reader.readAsDataURL(file);
-        }
 
         function addIngredient() {
             const input = document.getElementById('ingredientInput');
@@ -3146,84 +3084,189 @@
         }
 
         async function generateRecipe() {
-            if (ingredients.length === 0 && !foodImageData) {
-                alert('Please add ingredients or upload a photo');
+            if (ingredients.length === 0) {
+                alert('Please add ingredients');
                 return;
             }
 
             const container = document.getElementById('recipeResult');
-            container.innerHTML = '<div class="loading"></div> Generating recipe with AI' + (foodImageData ? ' Vision' : '') + '...';
+            container.innerHTML = '<div class="loading"></div> Generating recipe with AI...';
 
             const dietaryInfo = activeFilters.length > 0 ? `Dietary restrictions: ${activeFilters.join(', ')}.` : '';
-            let prompt;
+            const prompt = `Create a delicious recipe using these ingredients: ${ingredients.join(', ')}. ${dietaryInfo} Include: 1) Recipe name, 2) Complete ingredients list with amounts, 3) Step-by-step instructions (numbered), 4) Cooking time, 5) Difficulty level.`;
+            const response = await callDeepSeekAPI(prompt);
+            container.innerHTML = `
+                <div class="recipe-result">
+                    <h4><i class="fas fa-utensils"></i> Your AI-Generated Recipe</h4>
+                    <div style="margin-top: 1rem; white-space: pre-wrap;">${response}</div>
+                </div>
+            `;
+        }
 
-            if (foodImageData) {
-                // Use Vision AI caption + manual ingredients
-                const manualIngredients = ingredients.length > 0 ? ` Additional ingredients: ${ingredients.join(', ')}.` : '';
-                prompt = `Create a delicious recipe using the ingredients visible in the image.${manualIngredients} ${dietaryInfo} Include: 1) Recipe name, 2) Complete ingredients list with amounts, 3) Step-by-step instructions (numbered), 4) Cooking time, 5) Difficulty level.`;
-                const response = await analyzeImageWithVision(foodImageData, prompt);
-                container.innerHTML = `
-                    <div class="recipe-result">
-                        <h4><i class="fas fa-utensils"></i> Your Recipe (Vision AI) 📸</h4>
-                        <div style="margin-top: 1rem; white-space: pre-wrap;">${response}</div>
+        // PROJECT 5: LIVE SOCCER DASHBOARD (football-data.org)
+        const FOOTBALL_API_KEY = 'c855cf21095f4455af3ea8dc87bda2ad';
+        const API_BASE = 'https://api.football-data.org/v4';
+
+        async function fetchFootballData(endpoint) {
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                method: 'GET',
+                headers: { 'X-Auth-Token': FOOTBALL_API_KEY }
+            });
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+            return await response.json();
+        }
+
+        async function searchFootball() {
+            const searchTerm = document.getElementById('teamSearch').value.trim();
+            const container = document.getElementById('soccerData');
+            container.innerHTML = '<div class="loading"></div> Loading Premier League data...';
+
+            try {
+                // Fetch matches and standings
+                const [matchesData, standingsData] = await Promise.all([
+                    fetchFootballData('/competitions/PL/matches?status=FINISHED,SCHEDULED,IN_PLAY'),
+                    fetchFootballData('/competitions/PL/standings')
+                ]);
+
+                // Filter matches if search term provided
+                let matches = matchesData.matches || [];
+                if (searchTerm) {
+                    matches = matches.filter(match =>
+                        match.homeTeam.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        match.awayTeam.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    );
+                }
+
+                // Limit to 10 matches
+                matches = matches.slice(0, 10);
+
+                // Get top 5 standings
+                const standings = standingsData.standings[0]?.table.slice(0, 5) || [];
+
+                // Build HTML
+                let html = `
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <h3 style="color: white; margin-bottom: 0.3rem;">
+                            <i class="fas fa-trophy"></i> ${matchesData.competition.name}
+                        </h3>
+                        <p style="color: var(--light-gray); font-size: 0.9rem;">
+                            ${searchTerm ? `Results for "${searchTerm}"` : 'Latest Fixtures & Standings'}
+                        </p>
                     </div>
                 `;
-            } else {
-                // Text-only
-                prompt = `Create a delicious recipe using these ingredients: ${ingredients.join(', ')}. ${dietaryInfo} Include: 1) Recipe name, 2) Complete ingredients list with amounts, 3) Step-by-step instructions (numbered), 4) Cooking time, 5) Difficulty level.`;
-                const response = await callDeepSeekAPI(prompt);
+
+                // Show standings table (top 5)
+                if (standings.length > 0) {
+                    html += `
+                        <h4 style="color: var(--neon-blue); margin-bottom: 1rem; font-size: 1.1rem;">
+                            <i class="fas fa-list-ol"></i> League Table (Top 5)
+                        </h4>
+                        <div style="background: rgba(0,0,0,0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                                <thead>
+                                    <tr style="color: var(--neon-blue); border-bottom: 1px solid rgba(0,212,255,0.3);">
+                                        <th style="padding: 0.5rem; text-align: left;">#</th>
+                                        <th style="padding: 0.5rem; text-align: left;">Team</th>
+                                        <th style="padding: 0.5rem; text-align: center;">P</th>
+                                        <th style="padding: 0.5rem; text-align: center;">W</th>
+                                        <th style="padding: 0.5rem; text-align: center;">D</th>
+                                        <th style="padding: 0.5rem; text-align: center;">L</th>
+                                        <th style="padding: 0.5rem; text-align: center;">Pts</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+
+                    standings.forEach(team => {
+                        html += `
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td style="padding: 0.5rem; color: var(--neon-purple); font-weight: 600;">${team.position}</td>
+                                <td style="padding: 0.5rem;">${team.team.name}</td>
+                                <td style="padding: 0.5rem; text-align: center;">${team.playedGames}</td>
+                                <td style="padding: 0.5rem; text-align: center;">${team.won}</td>
+                                <td style="padding: 0.5rem; text-align: center;">${team.draw}</td>
+                                <td style="padding: 0.5rem; text-align: center;">${team.lost}</td>
+                                <td style="padding: 0.5rem; text-align: center; color: var(--neon-blue); font-weight: 600;">${team.points}</td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+
+                // Show fixtures
+                html += `
+                    <h4 style="color: var(--neon-blue); margin-bottom: 1rem; margin-top: 1.5rem; font-size: 1.1rem;">
+                        <i class="fas fa-calendar"></i> Recent & Upcoming Fixtures
+                    </h4>
+                `;
+
+                if (matches.length === 0) {
+                    html += `<p style="color: var(--light-gray); text-align: center;">No matches found${searchTerm ? ` for "${searchTerm}"` : ''}</p>`;
+                } else {
+                    matches.forEach(match => {
+                        const homeTeam = match.homeTeam.name;
+                        const awayTeam = match.awayTeam.name;
+                        const homeScore = match.score.fullTime.home !== null ? match.score.fullTime.home : '-';
+                        const awayScore = match.score.fullTime.away !== null ? match.score.fullTime.away : '-';
+                        const status = match.status;
+                        const isLive = status === 'IN_PLAY' || status === 'PAUSED';
+                        const statusText = isLive ? 'Live' : (status === 'FINISHED' ? 'FT' : 'Scheduled');
+
+                        html += `
+                            <div class="match-card">
+                                <div class="match-teams">
+                                    <div>${homeTeam}</div>
+                                    <div>${awayTeam}</div>
+                                </div>
+                                <div class="match-score">${homeScore} - ${awayScore}</div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    ${isLive ? '<div class="live-indicator"></div>' : ''}
+                                    <span style="color: ${isLive ? '#EF4444' : 'var(--light-gray)'}; font-size: 0.85rem;">${statusText}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                html += `
+                    <p style="color: var(--neon-purple); font-size: 0.85rem; margin-top: 1.5rem; text-align: center;">
+                        <i class="fas fa-info-circle"></i> Live data from football-data.org API<br>
+                        <span style="font-size: 0.8rem; color: var(--light-gray);">Fixtures, Standings & Live Scores</span>
+                    </p>
+                `;
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Soccer API Error:', error);
                 container.innerHTML = `
-                    <div class="recipe-result">
-                        <h4><i class="fas fa-utensils"></i> Your AI-Generated Recipe</h4>
-                        <div style="margin-top: 1rem; white-space: pre-wrap;">${response}</div>
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 2px solid rgba(239, 68, 68, 0.5); padding: 1.5rem; border-radius: 12px; text-align: center;">
+                        <h4 style="color: #EF4444;"><i class="fas fa-exclamation-triangle"></i> API Error</h4>
+                        <p style="color: var(--light-gray); margin-top: 0.5rem;">
+                            ${error.message}<br><br>
+                            <strong>This will work when deployed to GitHub Pages!</strong><br>
+                            <span style="font-size: 0.85rem;">CORS blocks local file:// protocol</span>
+                        </p>
                     </div>
                 `;
             }
         }
 
-        // PROJECT 5: SPORTS DASHBOARD
-        let currentSport = 'soccer';
-
-        function switchSport(element, sport) {
-            document.querySelectorAll('.sport-tab').forEach(tab => tab.classList.remove('active'));
-            element.classList.add('active');
-            currentSport = sport;
-            loadMatches();
-        }
-
-        function loadMatches() {
-            const container = document.getElementById('matchesContainer');
-
-            // Mock data - in production, use real API
-            const mockMatches = {
-                soccer: [
-                    { team1: 'Arsenal', team2: 'Chelsea', score1: 2, score2: 1, status: 'Live' },
-                    { team1: 'Man City', team2: 'Liverpool', score1: 3, score2: 3, status: 'Finished' },
-                    { team1: 'Barcelona', team2: 'Real Madrid', score1: 0, score2: 0, status: 'Upcoming' }
-                ],
-                basketball: [
-                    { team1: 'Lakers', team2: 'Warriors', score1: 105, score2: 98, status: 'Live' },
-                    { team1: 'Celtics', team2: 'Heat', score1: 112, score2: 108, status: 'Finished' },
-                    { team1: 'Nets', team2: 'Bucks', score1: 0, score2: 0, status: 'Upcoming' }
-                ]
-            };
-
-            const matches = mockMatches[currentSport] || [];
-            container.innerHTML = matches.map(match => `
-                <div class="match-card">
-                    <div class="match-teams">
-                        <div>${match.team1}</div>
-                        <div>${match.team2}</div>
-                    </div>
-                    <div class="match-score">${match.score1} - ${match.score2}</div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        ${match.status === 'Live' ? '<div class="live-indicator"></div>' : ''}
-                        <span style="color: ${match.status === 'Live' ? '#EF4444' : 'var(--light-gray)'}; font-size: 0.85rem;">${match.status}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-        loadMatches();
+        // Auto-load matches on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Auto-load after a short delay to not block other content
+            setTimeout(() => {
+                const container = document.getElementById('soccerData');
+                if (container) {
+                    searchFootball();
+                }
+            }, 1000);
+        });
 
         // PROJECT 6: BUSINESS PLAN GENERATOR
         async function generateBusinessPlan() {
@@ -3253,104 +3296,29 @@
             `;
         }
 
-        // PROJECT 7: DOCUMENT ANALYZER WITH FREE VISION AI
-        let docImageData = null;
-
-        function handleDocImage(event) {
-            const file = event.target.files[0];
-            if (!file || !file.type.startsWith('image/')) return;
-
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                docImageData = e.target.result;
-                const preview = document.getElementById('docImagePreview');
-                preview.innerHTML = `
-                    <div class="image-analysis">
-                        <img src="${e.target.result}" class="image-preview" alt="Document">
-                        <p style="color: var(--neon-blue); margin-top: 0.5rem;">🔄 Extracting text with Vision AI...</p>
-                    </div>
-                `;
-
-                // Extract text with Vision AI
-                const caption = await analyzeImageWithVision(docImageData);
-                preview.innerHTML += `
-                    <p style="color: var(--light-gray); font-size: 0.9rem; margin-top: 0.5rem;">
-                        ✅ Text detected: ${caption}
-                    </p>
-                `;
-            };
-            reader.readAsDataURL(file);
-        }
-
+        // PROJECT 7: DOCUMENT ANALYZER
         async function analyzeDocument() {
             const docText = document.getElementById('docText').value.trim();
 
-            if (!docText && !docImageData) {
-                alert('Please upload an image or paste text');
+            if (!docText) {
+                alert('Please paste document text');
                 return;
             }
 
             const container = document.getElementById('docAnalysis');
-            container.innerHTML = '<div class="loading"></div> Analyzing document with AI' + (docImageData ? ' Vision' : '') + '...';
+            container.innerHTML = '<div class="loading"></div> Analyzing document with AI...';
 
-            let response;
-
-            if (docImageData) {
-                // Use Vision AI
-                const context = docText ? `Additional context: ${docText}. ` : '';
-                const prompt = `${context}Analyze this document image and provide: 1) What type of document this is, 2) Main topic summary, 3) Key information extracted, 4) Important details, dates, or numbers, 5) Recommendations or action items.`;
-                response = await analyzeImageWithVision(docImageData, prompt);
-                container.innerHTML = `
-                    <div class="analysis-section">
-                        <h4><i class="fas fa-file-alt"></i> Document Analysis (Vision AI) 📸</h4>
-                        <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
-                    </div>
-                `;
-            } else {
-                // Text-only
-                const prompt = `Analyze this document and provide: 1) Main topic summary (2-3 sentences), 2) Key points (5-7 bullet points), 3) Important dates/numbers if any, 4) Action items or recommendations. Document:\n\n${docText.substring(0, 2000)}`;
-                response = await callDeepSeekAPI(prompt);
-                container.innerHTML = `
-                    <div class="analysis-section">
-                        <h4><i class="fas fa-file-alt"></i> Document Analysis</h4>
-                        <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
-                    </div>
-                `;
-            }
+            const prompt = `Analyze this document and provide: 1) Main topic summary (2-3 sentences), 2) Key points (5-7 bullet points), 3) Important dates/numbers if any, 4) Action items or recommendations. Document:\n\n${docText.substring(0, 2000)}`;
+            const response = await callDeepSeekAPI(prompt);
+            container.innerHTML = `
+                <div class="analysis-section">
+                    <h4><i class="fas fa-file-alt"></i> Document Analysis</h4>
+                    <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
+                </div>
+            `;
         }
 
-        // PROJECT 8: HOMEWORK HELPER WITH FREE VISION AI
-        let homeworkImageData = null;
-
-        function handleHomeworkImage(event) {
-            const file = event.target.files[0];
-            if (!file || !file.type.startsWith('image/')) return;
-
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                homeworkImageData = e.target.result;
-                const preview = document.getElementById('homeworkImagePreview');
-                preview.innerHTML = `
-                    <div class="image-analysis">
-                        <img src="${e.target.result}" class="image-preview" alt="Homework Problem">
-                        <p style="color: var(--neon-blue); margin-top: 0.5rem;">🔄 Reading problem with Vision AI...</p>
-                    </div>
-                `;
-
-                // Extract problem text with FREE Vision AI
-                const caption = await analyzeImageWithVision(homeworkImageData);
-                preview.innerHTML += `
-                    <p style="color: var(--light-gray); font-size: 0.9rem; margin-top: 0.5rem;">
-                        ✅ Problem detected: ${caption}
-                    </p>
-                `;
-
-                // Auto-populate the question field
-                document.getElementById('homeworkQuestion').value = caption;
-            };
-            reader.readAsDataURL(file);
-        }
-
+        // PROJECT 8: HOMEWORK HELPER
         async function solveHomework() {
             const subject = document.getElementById('subjectSelect').value;
             const question = document.getElementById('homeworkQuestion').value.trim();
@@ -3360,40 +3328,23 @@
                 return;
             }
 
-            if (!question && !homeworkImageData) {
-                alert('Please enter your question or upload a photo');
+            if (!question) {
+                alert('Please enter your question');
                 return;
             }
 
             const container = document.getElementById('homeworkSolution');
-            container.innerHTML = '<div class="loading"></div> Analyzing problem with AI' + (homeworkImageData ? ' Vision' : '') + '...';
+            container.innerHTML = '<div class="loading"></div> Analyzing problem with AI...';
 
-            let response;
+            const prompt = `As an educational tutor, explain this ${subject} problem step-by-step for a student: "${question}". Provide: 1) Step-by-step solution (clearly numbered), 2) Explanation of key concepts, 3) Final answer. Use simple language and show all working.`;
+            const response = await callDeepSeekAPI(prompt);
 
-            if (homeworkImageData) {
-                // Use Vision AI for image-based problems
-                const context = question ? `Additional context: ${question}. ` : '';
-                const prompt = `${context}As an educational tutor for ${subject}, analyze this homework problem from the image. Provide: 1) What the problem is asking (clearly stated), 2) Step-by-step solution (numbered with explanations), 3) Key concepts explained, 4) Final answer highlighted. Be thorough and educational.`;
-                response = await analyzeImageWithVision(homeworkImageData, prompt);
-
-                container.innerHTML = `
-                    <div class="analysis-section">
-                        <h4><i class="fas fa-graduation-cap"></i> Solution & Explanation (Vision AI) 📸</h4>
-                        <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
-                    </div>
-                `;
-            } else {
-                // Text-only approach
-                const prompt = `As an educational tutor, explain this ${subject} problem step-by-step for a student: "${question}". Provide: 1) Step-by-step solution (clearly numbered), 2) Explanation of key concepts, 3) Final answer. Use simple language and show all working.`;
-                response = await callDeepSeekAPI(prompt);
-
-                container.innerHTML = `
-                    <div class="analysis-section">
-                        <h4><i class="fas fa-graduation-cap"></i> Solution & Explanation</h4>
-                        <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
-                    </div>
-                `;
-            }
+            container.innerHTML = `
+                <div class="analysis-section">
+                    <h4><i class="fas fa-graduation-cap"></i> Solution & Explanation</h4>
+                    <div style="margin-top: 1rem; white-space: pre-wrap; line-height: 1.8;">${response}</div>
+                </div>
+            `;
         }
 
         // PROJECT 9: TRAVEL PLANNER
@@ -3789,3 +3740,4 @@
     </script>
 </body>
 </html>
+
